@@ -14,8 +14,12 @@ public final class PanelCraft extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
 
+        int servicePort = getConfig().getInt("webservice.port");
+        getLogger().info("Deploy web service at: " + servicePort);
+        getLogger().info("You can access it on: http://localhost:" + servicePort);
+
         try {
-            webserviceServer = HttpServer.create(new InetSocketAddress(8080), 0);
+            webserviceServer = HttpServer.create(new InetSocketAddress(servicePort), 0);
             PanelCraftWebserver.setup(webserviceServer);
         } catch (IOException e) {
             e.printStackTrace();
@@ -24,6 +28,6 @@ public final class PanelCraft extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        webserviceServer.stop(0);
     }
 }
