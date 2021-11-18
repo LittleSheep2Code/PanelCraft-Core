@@ -1,12 +1,12 @@
 package club.smartsheep.club.panelcraftcore.Controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import club.smartsheep.club.panelcraftcore.Common.Responsor.JSONResponse;
+import club.smartsheep.club.panelcraftcore.Common.StatusCodeSetter;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.bukkit.Bukkit;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,11 +14,9 @@ public class DetailController implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         if(!exchange.getRequestMethod().equalsIgnoreCase("GET")) {
+            StatusCodeSetter.setStatusCode(exchange, 405);
             return;
         }
-
-        exchange.getResponseHeaders().set("Content-Type", "application/json");;
-        exchange.sendResponseHeaders(200, 0);
 
         Map<String, Object> response = new HashMap<>();
         response.put("status", "running");
@@ -30,8 +28,6 @@ public class DetailController implements HttpHandler {
 
         response.put("server", serverStatus);
 
-        OutputStream responseBody = exchange.getResponseBody();
-        responseBody.write(new ObjectMapper().writeValueAsString(response).getBytes());
-        responseBody.close();
+        JSONResponse.Response(exchange, response, 200);
     }
 }
