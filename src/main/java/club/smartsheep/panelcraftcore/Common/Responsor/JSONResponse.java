@@ -1,4 +1,4 @@
-package club.smartsheep.club.panelcraftcore.Common.Responsor;
+package club.smartsheep.panelcraftcore.Common.Responsor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;

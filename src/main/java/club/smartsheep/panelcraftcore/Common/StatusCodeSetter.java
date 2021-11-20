@@ -1,4 +1,4 @@
-package club.smartsheep.club.panelcraftcore.Common;
+package club.smartsheep.panelcraftcore.Common;
 
 import com.sun.net.httpserver.HttpExchange;
 

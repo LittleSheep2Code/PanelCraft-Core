@@ -1,6 +1,6 @@
-package club.smartsheep.club.panelcraftcore;
+package club.smartsheep.panelcraftcore;
 
-import club.smartsheep.club.panelcraftcore.Controllers.DetailController;
+import club.smartsheep.panelcraftcore.Controllers.DetailController;
 import com.sun.net.httpserver.HttpServer;
 
 import java.util.concurrent.Executors;

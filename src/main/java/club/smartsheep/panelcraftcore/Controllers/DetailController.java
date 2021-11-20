@@ -1,7 +1,7 @@
-package club.smartsheep.club.panelcraftcore.Controllers;
+package club.smartsheep.panelcraftcore.Controllers;
 
-import club.smartsheep.club.panelcraftcore.Common.Responsor.JSONResponse;
-import club.smartsheep.club.panelcraftcore.Common.StatusCodeSetter;
+import club.smartsheep.panelcraftcore.Common.Responsor.JSONResponse;
+import club.smartsheep.panelcraftcore.Common.StatusCodeSetter;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.bukkit.Bukkit;

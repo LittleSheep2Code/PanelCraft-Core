@@ -1,2 +1,5 @@
 webservice:
   port: 25564
+
+database:
+  useInnerDatabase: true
