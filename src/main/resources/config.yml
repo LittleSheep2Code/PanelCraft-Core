@@ -1,5 +1,14 @@
 webservice:
   port: 25564
 
+security:
+  root: asjb@bsxbcai292u@nbxca#$%^&*@Bobxcha
+
 database:
-  useInnerDatabase: true
+  disabled: true
+  host: 127.0.0.1
+  port: 3306
+  username: root
+  password: mysql@password
+  database: panelcraft
+  parameters: "useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"

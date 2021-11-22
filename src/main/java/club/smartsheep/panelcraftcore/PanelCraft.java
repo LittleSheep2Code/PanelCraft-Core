@@ -1,6 +1,6 @@
 package club.smartsheep.panelcraftcore;
 
-import club.smartsheep.panelcraftcore.Common.Configure.MybatisPlusConfigure;
+import club.smartsheep.panelcraftcore.Common.Configure.DatabaseConnector;
 import com.sun.net.httpserver.HttpServer;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,12 +20,11 @@ public final class PanelCraft extends JavaPlugin {
 
         saveDefaultConfig();
 
-        if (getConfig().getBoolean("database.useInnerDatabase")) {
+        if (getConfig().getBoolean("database.disabled")) {
             LOGGER.warning("Now using inner database, inner database use SQLite, performance is not good, if you are production environment");
-            MybatisPlusConfigure.setupMybatisPlus(true);
-        } else {
-            MybatisPlusConfigure.setupMybatisPlus(false);
         }
+
+        DatabaseConnector.getInstance().connect();
 
         int servicePort = getConfig().getInt("webservice.port");
         LOGGER.info("Deploy web service at: " + servicePort);
@@ -40,7 +39,5 @@ public final class PanelCraft extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
-        webserviceServer.stop(0);
-    }
+    public void onDisable() {}
 }
