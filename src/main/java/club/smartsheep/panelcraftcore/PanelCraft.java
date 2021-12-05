@@ -24,7 +24,7 @@ public final class PanelCraft extends JavaPlugin {
             LOGGER.warning("Now using inner database, inner database use SQLite, performance is not good, if you are production environment");
         }
 
-        DatabaseConnector.getInstance().connect();
+        DatabaseConnector.get().connect();
 
         int servicePort = getConfig().getInt("webservice.port");
         LOGGER.info("Deploy web service at: " + servicePort);

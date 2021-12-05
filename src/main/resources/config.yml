@@ -5,10 +5,4 @@ security:
   root: asjb@bsxbcai292u@nbxca#$%^&*@Bobxcha
 
 database:
-  disabled: true
-  host: 127.0.0.1
-  port: 3306
-  username: root
-  password: mysql@password
-  database: panelcraft
-  parameters: "useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+  sqlname: "database"

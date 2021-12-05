@@ -1,7 +1,7 @@
 package club.smartsheep.panelcraftcore.Controllers;
 
 import club.smartsheep.panelcraftcore.Common.Responsor.JSONResponse;
-import club.smartsheep.panelcraftcore.Common.StatusCodeSetter;
+import club.smartsheep.panelcraftcore.Common.Responsor.NullResponse;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.bukkit.Bukkit;
@@ -14,7 +14,7 @@ public class DetailController implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         if(!exchange.getRequestMethod().equalsIgnoreCase("GET")) {
-            StatusCodeSetter.setStatusCode(exchange, 405);
+            NullResponse.Response(exchange, 405);
             return;
         }
 

@@ -5,7 +5,7 @@ import lombok.SneakyThrows;
 public class DatabaseInitialization {
     @SneakyThrows
     public static void setupDatabases() {
-        DatabaseConnector.getInstance().DATABASE_SESSION.createStatement().execute(
+        DatabaseConnector.get().DATABASE_SESSION.createStatement().execute(
                 "SET NAMES utf8mb4;" +
                 "SET FOREIGN_KEY_CHECKS = 0;" +
                 "" +
