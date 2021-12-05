@@ -39,5 +39,7 @@ public final class PanelCraft extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {}
+    public void onDisable() {
+        webserviceServer.stop(1);
+    }
 }

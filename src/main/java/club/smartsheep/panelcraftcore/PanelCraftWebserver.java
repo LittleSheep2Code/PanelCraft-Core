@@ -1,7 +1,8 @@
 package club.smartsheep.panelcraftcore;
 
+import club.smartsheep.panelcraftcore.Controllers.Console.ReloadController;
 import club.smartsheep.panelcraftcore.Controllers.DetailController;
-import club.smartsheep.panelcraftcore.Controllers.PowerOffController;
+import club.smartsheep.panelcraftcore.Controllers.Console.PowerOffController;
 import club.smartsheep.panelcraftcore.Controllers.Status.DatabaseStatusController;
 import com.sun.net.httpserver.HttpServer;
 
@@ -14,6 +15,7 @@ public class PanelCraftWebserver {
         server.createContext("/", new DetailController());
 
         server.createContext("/console/poweroff", new PowerOffController());
+        server.createContext("/console/reload", new ReloadController());
 
         server.createContext("/statues/database", new DatabaseStatusController());
 

@@ -1,6 +1,7 @@
-package club.smartsheep.panelcraftcore.Controllers;
+package club.smartsheep.panelcraftcore.Controllers.Console;
 
 import club.smartsheep.panelcraftcore.Common.BodyProcessor;
+import club.smartsheep.panelcraftcore.Common.Responsor.ErrorResponse;
 import club.smartsheep.panelcraftcore.Common.Responsor.JSONResponse;
 import club.smartsheep.panelcraftcore.Common.Responsor.NullResponse;
 import club.smartsheep.panelcraftcore.PanelCraft;
@@ -22,6 +23,11 @@ public class PowerOffController implements HttpHandler {
         }
 
         JSONObject body = BodyProcessor.getJSONObject(exchange);
+        if(body == null) {
+            ErrorResponse.BodyProcessErrorResponse(exchange, "JSON");
+            return;
+        }
+
         if(!body.has("password") || !body.getString("password").equals(PanelCraft.getPlugin(PanelCraft.class).getConfig().getString("security.root"))) {
             Map<String, Object> response = new HashMap<>();
 
@@ -38,6 +44,6 @@ public class PowerOffController implements HttpHandler {
         }
 
         Bukkit.getServer().shutdown();
-        NullResponse.Response(exchange, 201);
+        NullResponse.Response(exchange, 200);
     }
 }
