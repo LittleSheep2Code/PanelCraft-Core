@@ -2,7 +2,6 @@ package club.smartsheep.panelcraftcore.Controllers.Console;
 
 import club.smartsheep.panelcraftcore.Common.BodyProcessor;
 import club.smartsheep.panelcraftcore.Common.Responsor.ErrorResponse;
-import club.smartsheep.panelcraftcore.Common.Responsor.JSONResponse;
 import club.smartsheep.panelcraftcore.Common.Responsor.NullResponse;
 import club.smartsheep.panelcraftcore.PanelCraft;
 import com.sun.net.httpserver.HttpExchange;
@@ -11,10 +10,8 @@ import org.bukkit.Bukkit;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
-public class ReloadController implements HttpHandler {
+public class ExecuteController implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         if(!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
@@ -39,7 +36,14 @@ public class ReloadController implements HttpHandler {
             return;
         }
 
-        Bukkit.getScheduler().runTask(PanelCraft.getPlugin(PanelCraft.class), () -> Bukkit.getServer().reload());
+        if(!body.has("command")) {
+            ErrorResponse.MissingArgumentsErrorResponse(exchange, "command");
+        }
+
+        Bukkit.getScheduler().runTask(PanelCraft.getPlugin(PanelCraft.class), () -> {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), body.getString("command"));
+        });
+
         NullResponse.Response(exchange, 200);
     }
 }

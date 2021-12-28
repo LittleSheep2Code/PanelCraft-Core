@@ -29,18 +29,14 @@ public class PowerOffController implements HttpHandler {
         }
 
         if(!body.has("password") || !body.getString("password").equals(PanelCraft.getPlugin(PanelCraft.class).getConfig().getString("security.root"))) {
-            Map<String, Object> response = new HashMap<>();
-
             if(body.has("password")) {
-                response.put("error", "InsufficientPermissions");
-                response.put("message", "Please check your password or reset it, the root password is wrong.");
+                ErrorResponse.InsufficientPermissionsErrorResponse(exchange);
             }
             else {
-                response.put("error", "MissingArguments");
-                response.put("message", "Need root password to execute power off operation.");
+                ErrorResponse.MissingArgumentsErrorResponse(exchange, "root password");
             }
 
-            JSONResponse.Response(exchange, response, 400);
+            return;
         }
 
         Bukkit.getServer().shutdown();

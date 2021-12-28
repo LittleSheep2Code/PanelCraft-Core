@@ -50,4 +50,25 @@ public class ErrorResponse {
     public static void BodyProcessErrorResponse(HttpExchange exchange, String formatNeed) {
         CustomErrorResponse(exchange, "FormatBodyFailed", "Please check your body, this api require a " + formatNeed + " data.");
     }
+
+    public static void InsufficientPermissionsErrorResponse(HttpExchange exchange) {
+        CustomErrorResponse(exchange, "InsufficientPermissions", "Please check your password or reset it, the root password is wrong.");
+    }
+
+    public static void DataErrorResponse(HttpExchange exchange, String message) {
+        CustomErrorResponse(exchange, "DataError", message);
+    }
+
+    public static void ModuleUnactivatedErrorResponse(HttpExchange exchange, String unactivatedModuleName) {
+        CustomErrorResponse(exchange, "ModuleUnactivatedError", unactivatedModuleName + " module isn't activate, please check it api is hooked(installed) and reload try again!", 500);
+    }
+
+    /**
+     * Return missing parameter error response
+     * @param exchange The handler can handle parameter
+     * @param missingThings What parameter missed, split by space
+     */
+    public static void MissingArgumentsErrorResponse(HttpExchange exchange, String missingThings) {
+        CustomErrorResponse(exchange, "MissingArguments", "Missing " + missingThings + ".");
+    }
 }

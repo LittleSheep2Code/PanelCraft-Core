@@ -1,5 +1,6 @@
 package club.smartsheep.panelcraftcore;
 
+import club.smartsheep.panelcraftcore.Controllers.Console.Placeholder.PlaceholderProcessorController;
 import club.smartsheep.panelcraftcore.Controllers.Console.ReloadController;
 import club.smartsheep.panelcraftcore.Controllers.DetailController;
 import club.smartsheep.panelcraftcore.Controllers.Console.PowerOffController;
@@ -16,6 +17,8 @@ public class PanelCraftWebserver {
 
         server.createContext("/console/poweroff", new PowerOffController());
         server.createContext("/console/reload", new ReloadController());
+
+        server.createContext("/console/placeholder/process", new PlaceholderProcessorController());
 
         server.createContext("/statues/database", new DatabaseStatusController());
 
