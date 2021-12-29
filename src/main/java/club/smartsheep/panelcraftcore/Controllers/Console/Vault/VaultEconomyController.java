@@ -1,4 +1,4 @@
-package club.smartsheep.panelcraftcore.Controllers.Console.Placeholder;
+package club.smartsheep.panelcraftcore.Controllers.Console.Vault;
 
 import club.smartsheep.panelcraftcore.Common.BodyProcessor;
 import club.smartsheep.panelcraftcore.Common.Responsor.ErrorResponse;
@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlaceholderProcessorController implements HttpHandler {
+public class VaultEconomyController implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         if(!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
@@ -24,8 +24,8 @@ public class PlaceholderProcessorController implements HttpHandler {
             return;
         }
 
-        if(!PanelCraft.HookStatues.get("placeholderAPI")) {
-            ErrorResponse.ModuleUnactivatedErrorResponse(exchange, "placeholderAPI");
+        if(!PanelCraft.HookStatues.get("vault.economy")) {
+            ErrorResponse.ModuleUnactivatedErrorResponse(exchange, "vault economy");
             return;
         }
 
@@ -45,11 +45,6 @@ public class PlaceholderProcessorController implements HttpHandler {
             return;
         }
 
-        if(!body.has("message")) {
-            ErrorResponse.MissingArgumentsErrorResponse(exchange, "message");
-            return;
-        }
-
         if(!body.has("player")) {
             ErrorResponse.MissingArgumentsErrorResponse(exchange, "player");
             return;
@@ -61,9 +56,39 @@ public class PlaceholderProcessorController implements HttpHandler {
             return;
         }
 
+        if(!body.has("operation")) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", "success");
+            response.put("data", PanelCraft.economy.getBalance(player));
+            JSONResponse.Response(exchange, response, 200);
+            return;
+        }
+
+        if(!body.has("amount")) {
+            ErrorResponse.MissingArgumentsErrorResponse(exchange, "amount");
+            return;
+        }
+
         Map<String, Object> response = new HashMap<>();
         response.put("status", "success");
-        response.put("data", PlaceholderAPI.setPlaceholders(player, body.getString("message")));
+
+        switch (body.getString("operation")) {
+            case "add":
+            case "plus":
+            case "deposit":
+                PanelCraft.economy.depositPlayer(player, body.getDouble("amount"));
+                response.put("data", "Deposit player " + body.getString("player") + " balance " + body.getDouble("amount"));
+                break;
+            case "withdraw":
+            case "remove":
+            case "subtract":
+                PanelCraft.economy.withdrawPlayer(player, body.getDouble("amount"));
+                response.put("data", "Withdraw player " + body.getString("player") + " balance " + body.getDouble("amount"));
+                break;
+            default:
+                ErrorResponse.DataErrorResponse(exchange, "Unknown operation: " + body.getString("operation"));
+                return;
+        }
 
         JSONResponse.Response(exchange, response, 200);
     }

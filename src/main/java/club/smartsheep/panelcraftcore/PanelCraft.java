@@ -23,34 +23,37 @@ public final class PanelCraft extends JavaPlugin {
     public static Map<String, Boolean> HookStatues = new HashMap<>();
 
     // Vault Hook
-    private Economy economy;
-    private Permission permission;
-    private Chat chat;
+    public static Economy economy;
+    public static Permission permission;
+    public static Chat chat;
 
     private void setupVaultModule() {
+        if(Bukkit.getPluginManager().getPlugin("Vault") == null) {
+            LOGGER.warning("Failed to hook into vault, please check vault is installed. Vault need feature is disabled.");
+            HookStatues.put("vault", false);
+            return;
+        }
+
         RegisteredServiceProvider<Economy> ecoRegistration = getServer().getServicesManager().getRegistration(Economy.class);
         if (ecoRegistration != null) {
+            LOGGER.info("Vault Economy hooked!");
+            HookStatues.put("vault.economy", true);
             economy = ecoRegistration.getProvider();
         }
 
         RegisteredServiceProvider<Permission> permsRegistration = getServer().getServicesManager().getRegistration(Permission.class);
         if(permsRegistration != null) {
+            LOGGER.info("Vault Permission hooked!");
+            HookStatues.put("vault.permission", true);
             permission = permsRegistration.getProvider();
         }
 
         RegisteredServiceProvider<Chat> chatRegistration = getServer().getServicesManager().getRegistration(Chat.class);
         if(chatRegistration != null) {
+            LOGGER.info("Vault Chat hooked!");
+            HookStatues.put("vault.chat", true);
             chat = chatRegistration.getProvider();
         }
-
-        if(economy != null && permission != null && chat != null) {
-            LOGGER.info("Vault hooked!");
-            HookStatues.put("vault", true);
-            return;
-        }
-
-        LOGGER.warning("Failed to hook into vault, please check vault is installed.");
-        HookStatues.put("vault", false);
     }
 
     // PAPI Hook
