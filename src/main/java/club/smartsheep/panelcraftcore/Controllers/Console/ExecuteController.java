@@ -1,7 +1,9 @@
 package club.smartsheep.panelcraftcore.Controllers.Console;
 
 import club.smartsheep.panelcraftcore.Common.BodyProcessor;
+import club.smartsheep.panelcraftcore.Common.CommandExecutor;
 import club.smartsheep.panelcraftcore.Common.Responsor.ErrorResponse;
+import club.smartsheep.panelcraftcore.Common.Responsor.JSONResponse;
 import club.smartsheep.panelcraftcore.Common.Responsor.NullResponse;
 import club.smartsheep.panelcraftcore.PanelCraft;
 import com.sun.net.httpserver.HttpExchange;
@@ -10,6 +12,8 @@ import org.bukkit.Bukkit;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ExecuteController implements HttpHandler {
     @Override
@@ -41,9 +45,13 @@ public class ExecuteController implements HttpHandler {
         }
 
         Bukkit.getScheduler().runTask(PanelCraft.getPlugin(PanelCraft.class), () -> {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), body.getString("command"));
+            CommandExecutor executor = new CommandExecutor(Bukkit.getConsoleSender());
+            Bukkit.dispatchCommand(executor, body.getString("command"));
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", "success");
+            response.put("data", executor.getMessageLog());
+            executor.clearMessageLog();
+            JSONResponse.Response(exchange, response, 200);
         });
-
-        NullResponse.Response(exchange, 200);
     }
 }

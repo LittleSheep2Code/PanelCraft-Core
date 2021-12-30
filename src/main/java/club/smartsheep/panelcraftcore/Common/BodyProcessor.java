@@ -1,10 +1,8 @@
 package club.smartsheep.panelcraftcore.Common;
 
-import club.smartsheep.panelcraftcore.Common.Responsor.JSONResponse;
 import com.sun.net.httpserver.HttpExchange;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static club.smartsheep.panelcraftcore.PanelCraft.LOGGER;
