@@ -1,11 +1,12 @@
 package club.smartsheep.panelcraftcore;
 
 import club.smartsheep.panelcraftcore.Common.Configure.DatabaseConnector;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
 import com.sun.net.httpserver.HttpServer;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,35 +23,51 @@ public final class PanelCraft extends JavaPlugin {
     public static Logger LOGGER;
     public static Map<String, Boolean> HookStatues = new HashMap<>();
 
+    // ProtocolLib Hook
+    public static ProtocolManager protocolManager;
+
+    private void setupProtocolLib() {
+        if(Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
+            protocolManager = ProtocolLibrary.getProtocolManager();
+            HookStatues.put("ProtocolLib", true);
+        }
+
+        HookStatues.put("ProtocolLib", false);
+        LOGGER.warning("Failed to hook into ProtocolLib, please check ProtocolLib is installed. ProtocolLib need feature is disabled.");
+    }
+
     // Vault Hook
-    private Economy economy;
-    private Permission permission;
-    private Chat chat;
+    public static Economy economy;
+    public static Permission permission;
+    public static Chat chat;
 
     private void setupVaultModule() {
+        if(Bukkit.getPluginManager().getPlugin("Vault") == null) {
+            LOGGER.warning("Failed to hook into vault, please check vault is installed. Vault need feature is disabled.");
+            HookStatues.put("vault", false);
+            return;
+        }
+
         RegisteredServiceProvider<Economy> ecoRegistration = getServer().getServicesManager().getRegistration(Economy.class);
         if (ecoRegistration != null) {
+            LOGGER.info("Vault Economy hooked!");
+            HookStatues.put("vault.economy", true);
             economy = ecoRegistration.getProvider();
         }
 
         RegisteredServiceProvider<Permission> permsRegistration = getServer().getServicesManager().getRegistration(Permission.class);
         if(permsRegistration != null) {
+            LOGGER.info("Vault Permission hooked!");
+            HookStatues.put("vault.permission", true);
             permission = permsRegistration.getProvider();
         }
 
         RegisteredServiceProvider<Chat> chatRegistration = getServer().getServicesManager().getRegistration(Chat.class);
         if(chatRegistration != null) {
+            LOGGER.info("Vault Chat hooked!");
+            HookStatues.put("vault.chat", true);
             chat = chatRegistration.getProvider();
         }
-
-        if(economy != null && permission != null && chat != null) {
-            LOGGER.info("Vault hooked!");
-            HookStatues.put("vault", true);
-            return;
-        }
-
-        LOGGER.warning("Failed to hook into vault, please check vault is installed.");
-        HookStatues.put("vault", false);
     }
 
     // PAPI Hook
@@ -104,6 +121,8 @@ public final class PanelCraft extends JavaPlugin {
         setupVaultModule();
         // PAPI
         setupPAPIModule();
+        // ProtocolLib
+        setupProtocolLib();
 
         // Show hook status
         LOGGER.info("Hooking status: " + HookStatues.toString());

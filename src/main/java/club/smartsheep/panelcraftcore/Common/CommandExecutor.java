@@ -11,33 +11,42 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 public class CommandExecutor implements ConsoleCommandSender {
-    private final ConsoleCommandSender wrappedSender;
-    private final Spigot spigotWrapper;
-    private final StringBuilder msgLog = new StringBuilder();
+    private ConsoleCommandSender wrappedSender;
+    private Spigot spigotWrapper;
+    private final List<String> msgLog = new ArrayList<>();
 
-    @Override
-    public boolean isOp() {
-        return false;
-    }
-
-    @Override
-    public void setOp(boolean b) {
-
+    public CommandExecutor(ConsoleCommandSender wrappedSender) {
+        this.wrappedSender = wrappedSender;
+        this.spigotWrapper = new Spigot();
     }
 
     private class Spigot extends CommandSender.Spigot {
-        public void sendMessage(net.md_5.bungee.api.chat.BaseComponent component) {
-            msgLog.append(BaseComponent.toLegacyText(component)).append('\n');
+        /**
+         * Sends this sender a chat component.
+         *
+         * @param component the components to send
+         */
+        public void sendMessage(@NotNull net.md_5.bungee.api.chat.BaseComponent component) {
+            msgLog.add(BaseComponent.toLegacyText(component));
             wrappedSender.spigot().sendMessage();
         }
 
-        public void sendMessage(net.md_5.bungee.api.chat.BaseComponent... components) {
-            msgLog.append(BaseComponent.toLegacyText(components)).append('\n');
+        /**
+         * Sends an array of components as a single message to the sender.
+         *
+         * @param components the components to send
+         */
+        public void sendMessage(@NotNull net.md_5.bungee.api.chat.BaseComponent... components) {
+            msgLog.add(BaseComponent.toLegacyText(components));
             wrappedSender.spigot().sendMessage(components);
         }
     }
@@ -46,56 +55,55 @@ public class CommandExecutor implements ConsoleCommandSender {
         return msgLog.toString();
     }
 
+    public List<String> getRawMessageLog() {
+        return msgLog;
+    }
+
     public String getMessageLogStripColor() {
         return ChatColor.stripColor(msgLog.toString());
     }
 
     public void clearMessageLog() {
-        msgLog.setLength(0);
+        msgLog.clear();
     }
 
-
-    public CommandExecutor(ConsoleCommandSender wrappedSender) {
-        this.wrappedSender = wrappedSender;
-        spigotWrapper = new Spigot();
-    }
 
     @Override
-    public void sendMessage(String message) {
+    public void sendMessage(@NotNull String message) {
         wrappedSender.sendMessage(message);
-        msgLog.append(message).append('\n');
+        msgLog.add(message);
     }
 
     @Override
-    public void sendMessage(String[] messages) {
+    public void sendMessage(@NotNull String[] messages) {
         wrappedSender.sendMessage(messages);
         for (String message : messages) {
-            msgLog.append(message).append('\n');
+            msgLog.add(message);
         }
     }
 
     @Override
-    public void sendMessage(UUID uuid, String s) {
-
+    public void sendMessage(@Nullable UUID uuid, @NotNull String message) {
+        this.sendMessage(message);
     }
 
     @Override
-    public void sendMessage(UUID uuid, String... strings) {
-
+    public void sendMessage(@Nullable UUID uuid, @NotNull String[] messages) {
+        this.sendMessage(messages);
     }
 
     @Override
-    public Server getServer() {
+    public @NotNull Server getServer() {
         return wrappedSender.getServer();
     }
 
     @Override
-    public String getName() {
-        return "OrderFulfiller";
+    public @NotNull String getName() {
+        return "Console";
     }
 
     @Override
-    public CommandSender.Spigot spigot() {
+    public @NotNull CommandSender.Spigot spigot() {
         return spigotWrapper;
     }
 
@@ -105,88 +113,98 @@ public class CommandExecutor implements ConsoleCommandSender {
     }
 
     @Override
-    public void acceptConversationInput(String input) {
+    public void acceptConversationInput(@NotNull String input) {
         wrappedSender.acceptConversationInput(input);
     }
 
     @Override
-    public boolean beginConversation(Conversation conversation) {
+    public boolean beginConversation(@NotNull Conversation conversation) {
         return wrappedSender.beginConversation(conversation);
     }
 
     @Override
-    public void abandonConversation(Conversation conversation) {
+    public void abandonConversation(@NotNull Conversation conversation) {
         wrappedSender.abandonConversation(conversation);
     }
 
     @Override
-    public void abandonConversation(Conversation conversation, ConversationAbandonedEvent details) {
+    public void abandonConversation(@NotNull Conversation conversation, @NotNull ConversationAbandonedEvent details) {
         wrappedSender.abandonConversation(conversation, details);
     }
 
     @Override
-    public void sendRawMessage(String message) {
-        msgLog.append(message).append('\n');
+    public void sendRawMessage(@NotNull String message) {
+        msgLog.add(message);
         wrappedSender.sendRawMessage(message);
     }
 
     @Override
-    public void sendRawMessage(UUID uuid, String s) {
+    public void sendRawMessage(@Nullable UUID uuid, @NotNull String s) {
 
     }
 
     @Override
-    public boolean isPermissionSet(String name) {
+    public boolean isPermissionSet(@NotNull String name) {
         return wrappedSender.isPermissionSet(name);
     }
 
     @Override
-    public boolean isPermissionSet(Permission perm) {
+    public boolean isPermissionSet(@NotNull Permission perm) {
         return wrappedSender.isPermissionSet(perm);
     }
 
     @Override
-    public boolean hasPermission(String name) {
+    public boolean hasPermission(@NotNull String name) {
         return wrappedSender.hasPermission(name);
     }
 
     @Override
-    public boolean hasPermission(Permission perm) {
+    public boolean hasPermission(@NotNull Permission perm) {
         return wrappedSender.hasPermission(perm);
     }
 
     @Override
-    public PermissionAttachment addAttachment(Plugin plugin, String name, boolean value) {
+    public @NotNull PermissionAttachment addAttachment(@NotNull Plugin plugin, @NotNull String name, boolean value) {
         return wrappedSender.addAttachment(plugin, name, value);
     }
 
     @Override
-    public PermissionAttachment addAttachment(Plugin plugin) {
+    public @NotNull PermissionAttachment addAttachment(@NotNull Plugin plugin) {
         return wrappedSender.addAttachment(plugin);
     }
 
     @Override
-    public PermissionAttachment addAttachment(Plugin plugin, String name, boolean value, int ticks) {
+    public @Nullable PermissionAttachment addAttachment(@NotNull Plugin plugin, @NotNull String name, boolean value, int ticks) {
         return wrappedSender.addAttachment(plugin, name, value, ticks);
     }
 
     @Override
-    public PermissionAttachment addAttachment(Plugin plugin, int ticks) {
+    public @Nullable PermissionAttachment addAttachment(@NotNull Plugin plugin, int ticks) {
         return wrappedSender.addAttachment(plugin, ticks);
     }
 
     @Override
-    public void removeAttachment(PermissionAttachment permissionAttachment) {
-
+    public void removeAttachment(@NotNull PermissionAttachment attachment) {
+        wrappedSender.removeAttachment(attachment);
     }
 
     @Override
     public void recalculatePermissions() {
-
+        wrappedSender.recalculatePermissions();
     }
 
     @Override
-    public Set<PermissionAttachmentInfo> getEffectivePermissions() {
-        return null;
+    public @NotNull Set<PermissionAttachmentInfo> getEffectivePermissions() {
+        return wrappedSender.getEffectivePermissions();
+    }
+
+    @Override
+    public boolean isOp() {
+        return wrappedSender.isOp();
+    }
+
+    @Override
+    public void setOp(boolean value) {
+        wrappedSender.setOp(value);
     }
 }
