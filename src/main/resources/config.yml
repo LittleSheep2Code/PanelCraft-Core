@@ -2,7 +2,7 @@ webservice:
   port: 25564
 
 security:
-  root: asjb@bsxbcai292u@nbxca#$%^&*@Bobxcha
+  root: root@password@please@change@it
 
 database:
   sqlname: "database"

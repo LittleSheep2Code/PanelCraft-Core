@@ -47,7 +47,7 @@ public class ExecuteController implements HttpHandler {
         Bukkit.getScheduler().runTask(PanelCraft.getPlugin(PanelCraft.class), () -> {
             CommandExecutor executor = new CommandExecutor(Bukkit.getConsoleSender());
             Bukkit.dispatchCommand(executor, body.getString("command"));
-            Map<String, Object> response = new HashMap<>();
+            JSONObject response = new JSONObject();
             response.put("status", "success");
             response.put("data", executor.getRawMessageLog());
             executor.clearMessageLog();

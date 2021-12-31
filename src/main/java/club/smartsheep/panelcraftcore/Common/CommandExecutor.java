@@ -14,14 +14,11 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class CommandExecutor implements ConsoleCommandSender {
-    private ConsoleCommandSender wrappedSender;
-    private Spigot spigotWrapper;
+    private final ConsoleCommandSender wrappedSender;
+    private final Spigot spigotWrapper;
     private final List<String> msgLog = new ArrayList<>();
 
     public CommandExecutor(ConsoleCommandSender wrappedSender) {
@@ -77,9 +74,7 @@ public class CommandExecutor implements ConsoleCommandSender {
     @Override
     public void sendMessage(@NotNull String[] messages) {
         wrappedSender.sendMessage(messages);
-        for (String message : messages) {
-            msgLog.add(message);
-        }
+        msgLog.addAll(Arrays.asList(messages));
     }
 
     @Override

@@ -30,7 +30,7 @@ public class PanelCraftWebserver {
 
         server.createContext("/console/vault/economy", new VaultEconomyController());
 
-        server.createContext("/statues/database", new DatabaseStatusController());
+        server.createContext("/status/database", new DatabaseStatusController());
 
         server.start();
     }
