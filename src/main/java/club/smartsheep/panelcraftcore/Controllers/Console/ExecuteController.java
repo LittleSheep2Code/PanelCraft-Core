@@ -49,7 +49,7 @@ public class ExecuteController implements HttpHandler {
             Bukkit.dispatchCommand(executor, body.getString("command"));
             Map<String, Object> response = new HashMap<>();
             response.put("status", "success");
-            response.put("data", executor.getMessageLog());
+            response.put("data", executor.getRawMessageLog());
             executor.clearMessageLog();
             JSONResponse.Response(exchange, response, 200);
         });

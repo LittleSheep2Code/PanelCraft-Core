@@ -14,13 +14,15 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 public class CommandExecutor implements ConsoleCommandSender {
     private ConsoleCommandSender wrappedSender;
     private Spigot spigotWrapper;
-    private final StringBuilder msgLog = new StringBuilder();
+    private final List<String> msgLog = new ArrayList<>();
 
     public CommandExecutor(ConsoleCommandSender wrappedSender) {
         this.wrappedSender = wrappedSender;
@@ -34,7 +36,7 @@ public class CommandExecutor implements ConsoleCommandSender {
          * @param component the components to send
          */
         public void sendMessage(@NotNull net.md_5.bungee.api.chat.BaseComponent component) {
-            msgLog.append(BaseComponent.toLegacyText(component)).append('\n');
+            msgLog.add(BaseComponent.toLegacyText(component));
             wrappedSender.spigot().sendMessage();
         }
 
@@ -44,7 +46,7 @@ public class CommandExecutor implements ConsoleCommandSender {
          * @param components the components to send
          */
         public void sendMessage(@NotNull net.md_5.bungee.api.chat.BaseComponent... components) {
-            msgLog.append(BaseComponent.toLegacyText(components)).append('\n');
+            msgLog.add(BaseComponent.toLegacyText(components));
             wrappedSender.spigot().sendMessage(components);
         }
     }
@@ -53,26 +55,30 @@ public class CommandExecutor implements ConsoleCommandSender {
         return msgLog.toString();
     }
 
+    public List<String> getRawMessageLog() {
+        return msgLog;
+    }
+
     public String getMessageLogStripColor() {
         return ChatColor.stripColor(msgLog.toString());
     }
 
     public void clearMessageLog() {
-        msgLog.setLength(0);
+        msgLog.clear();
     }
 
 
     @Override
     public void sendMessage(@NotNull String message) {
         wrappedSender.sendMessage(message);
-        msgLog.append(message).append('\n');
+        msgLog.add(message);
     }
 
     @Override
     public void sendMessage(@NotNull String[] messages) {
         wrappedSender.sendMessage(messages);
         for (String message : messages) {
-            msgLog.append(message).append('\n');
+            msgLog.add(message);
         }
     }
 
@@ -128,7 +134,7 @@ public class CommandExecutor implements ConsoleCommandSender {
 
     @Override
     public void sendRawMessage(@NotNull String message) {
-        msgLog.append(message).append('\n');
+        msgLog.add(message);
         wrappedSender.sendRawMessage(message);
     }
 
