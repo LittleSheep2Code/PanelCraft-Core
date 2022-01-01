@@ -1,7 +1,6 @@
-package club.smartsheep.panelcraftcore.Controllers.Console;
+package club.smartsheep.panelcraftcore.Controllers.Status;
 
 import club.smartsheep.panelcraftcore.Common.BodyProcessor;
-import club.smartsheep.panelcraftcore.Common.CommandExecutor;
 import club.smartsheep.panelcraftcore.Common.Responsor.ErrorResponse;
 import club.smartsheep.panelcraftcore.Common.Responsor.JSONResponse;
 import club.smartsheep.panelcraftcore.Common.Responsor.NullResponse;
@@ -16,7 +15,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ExecuteController implements HttpHandler {
+public class PermissionStatusController implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         if(!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
@@ -30,29 +29,21 @@ public class ExecuteController implements HttpHandler {
             return;
         }
 
+        Map<String, Object> response = new HashMap<>();
         if(!body.has("password") || !CheckPassword.checkRootPassword(body.getString("password"))) {
             if(body.has("password")) {
-                ErrorResponse.InsufficientPermissionsErrorResponse(exchange);
+                response.put("status", "success");
+                response.put("data", false);
             }
             else {
                 ErrorResponse.MissingArgumentsErrorResponse(exchange, "root password");
+                return;
             }
-
-            return;
-        }
-
-        if(!body.has("command")) {
-            ErrorResponse.MissingArgumentsErrorResponse(exchange, "command");
-        }
-
-        Bukkit.getScheduler().runTask(PanelCraft.getPlugin(PanelCraft.class), () -> {
-            CommandExecutor executor = new CommandExecutor(Bukkit.getConsoleSender());
-            Bukkit.dispatchCommand(executor, body.getString("command"));
-            JSONObject response = new JSONObject();
+        } else {
             response.put("status", "success");
-            response.put("data", executor.getRawMessageLog());
-            executor.clearMessageLog();
-            JSONResponse.Response(exchange, response, 200);
-        });
+            response.put("data", true);
+        }
+
+        JSONResponse.Response(exchange, response, 200);
     }
 }

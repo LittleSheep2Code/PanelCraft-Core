@@ -7,6 +7,7 @@ import club.smartsheep.panelcraftcore.Controllers.Console.Vault.VaultEconomyCont
 import club.smartsheep.panelcraftcore.Controllers.DetailController;
 import club.smartsheep.panelcraftcore.Controllers.Console.PowerOffController;
 import club.smartsheep.panelcraftcore.Controllers.Status.DatabaseStatusController;
+import club.smartsheep.panelcraftcore.Controllers.Status.PermissionStatusController;
 import com.sun.net.httpserver.HttpServer;
 
 import java.util.concurrent.Executors;
@@ -31,6 +32,7 @@ public class PanelCraftWebserver {
         server.createContext("/console/vault/economy", new VaultEconomyController());
 
         server.createContext("/status/database", new DatabaseStatusController());
+        server.createContext("/status/permission", new PermissionStatusController());
 
         server.start();
     }

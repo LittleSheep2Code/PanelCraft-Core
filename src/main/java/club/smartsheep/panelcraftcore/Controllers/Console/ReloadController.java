@@ -4,6 +4,7 @@ import club.smartsheep.panelcraftcore.Common.BodyProcessor;
 import club.smartsheep.panelcraftcore.Common.Responsor.ErrorResponse;
 import club.smartsheep.panelcraftcore.Common.Responsor.JSONResponse;
 import club.smartsheep.panelcraftcore.Common.Responsor.NullResponse;
+import club.smartsheep.panelcraftcore.Common.Tokens.CheckPassword;
 import club.smartsheep.panelcraftcore.PanelCraft;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -28,7 +29,7 @@ public class ReloadController implements HttpHandler {
             return;
         }
 
-        if(!body.has("password") || !body.getString("password").equals(PanelCraft.getPlugin(PanelCraft.class).getConfig().getString("security.root"))) {
+        if(!body.has("password") || !CheckPassword.checkRootPassword(body.getString("password"))) {
             if(body.has("password")) {
                 ErrorResponse.InsufficientPermissionsErrorResponse(exchange);
             }
