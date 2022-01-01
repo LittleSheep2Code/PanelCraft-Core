@@ -1,6 +1,7 @@
 package club.smartsheep.panelcraftcore.Common.Tokens;
 
 import club.smartsheep.panelcraftcore.PanelCraft;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -13,15 +14,7 @@ public class CheckPassword {
      * @return Is the password correct
      */
     public static boolean checkRootPassword(String password) {
-        try {
-            MessageDigest encrypt = MessageDigest.getInstance("MD5");
-            encrypt.update(PanelCraft.getPlugin(PanelCraft.class).getConfig().getString("security.root").getBytes(StandardCharsets.UTF_8));
-            byte[] digest = encrypt.digest();
-            String rootPassword = new String(digest, StandardCharsets.UTF_8).toUpperCase();
-            return password.equalsIgnoreCase(rootPassword);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return false;
-        }
+        String rootPassword = DigestUtils.md5Hex(PanelCraft.getPlugin(PanelCraft.class).getConfig().getString("security.root"));
+        return password.equalsIgnoreCase(rootPassword);
     }
 }
