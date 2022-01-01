@@ -15,6 +15,8 @@ You can manage your minecraft server by web api and use webhook
 4. Security
    - We use one server, one root key, current we only have single user, and database didn't record user action. But more user and action record is on my way!
 5. Easy to use
+6. Cross version
+    - Support `1.8.x` - `1.18.x`
 
 ## Getting Start
 
