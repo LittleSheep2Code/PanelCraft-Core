@@ -25,7 +25,7 @@ public class VaultEconomyController implements HttpHandler {
             return;
         }
 
-        if(!PanelCraft.HookStatues.get("vault.economy")) {
+        if(!PanelCraft.HookStatues.getOrDefault("vault.economy", false)) {
             ErrorResponse.ModuleUnactivatedErrorResponse(exchange, "vault economy");
             return;
         }

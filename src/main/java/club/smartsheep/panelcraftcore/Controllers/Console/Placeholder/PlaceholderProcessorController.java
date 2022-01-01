@@ -25,7 +25,7 @@ public class PlaceholderProcessorController implements HttpHandler {
             return;
         }
 
-        if(!PanelCraft.HookStatues.get("placeholderAPI")) {
+        if(!PanelCraft.HookStatues.getOrDefault("placeholderAPI", false)) {
             ErrorResponse.ModuleUnactivatedErrorResponse(exchange, "placeholderAPI");
             return;
         }
