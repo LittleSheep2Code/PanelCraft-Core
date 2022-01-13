@@ -63,6 +63,10 @@ public class ErrorResponse {
         CustomErrorResponse(exchange, "ModuleUnactivatedError", unactivatedModuleName + " module isn't activate, please check it api is hooked(installed) and reload try again!", 500);
     }
 
+    public static void SQLErrorResponse(HttpExchange exchange, String state, String message) {
+        CustomErrorResponse(exchange, "SQLExecuteFailedError", "Execute script (state: " + state + ") failed with message: " + message, 500);
+    }
+
     /**
      * Return missing parameter error response
      * @param exchange The handler can handle parameter

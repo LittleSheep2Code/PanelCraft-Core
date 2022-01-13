@@ -7,14 +7,13 @@ import club.smartsheep.panelcraftcore.Hooks.VaultHook;
 import com.comphenix.protocol.ProtocolManager;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import lombok.SneakyThrows;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -73,8 +72,12 @@ public final class PanelCraft extends JavaPlugin {
         LOGGER.info("Hooking status: " + HookStatues.toString());
     }
 
+    @SneakyThrows
     @Override
     public void onDisable() {
+        // Close web server
         webserviceServer.stop(1);
+        // Close database connection
+        DatabaseConnector.get().DATABASE_SESSION.close();
     }
 }

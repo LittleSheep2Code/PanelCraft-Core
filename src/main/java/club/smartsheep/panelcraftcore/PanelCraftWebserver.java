@@ -1,5 +1,6 @@
 package club.smartsheep.panelcraftcore;
 
+import club.smartsheep.panelcraftcore.Controllers.Console.Dangerous.CreateDatabaseController;
 import club.smartsheep.panelcraftcore.Controllers.Console.ExecuteController;
 import club.smartsheep.panelcraftcore.Controllers.Console.Placeholder.PlaceholderProcessorController;
 import club.smartsheep.panelcraftcore.Controllers.Console.PowerOffController;
@@ -32,12 +33,13 @@ public class PanelCraftWebserver {
         server.createContext("/", new DetailController());
 
         RegisteredNamespace.add("/console");
-        server.createContext("/console/poweroff", new PowerOffController());
+        server.createContext("/console/power-off", new PowerOffController());
         server.createContext("/console/reload", new ReloadController());
         server.createContext("/console/execute", new ExecuteController());
-
+        // Dangerous
+        server.createContext("/console/danger-zone/setup-database", new CreateDatabaseController());
+        // Hooks
         server.createContext("/console/placeholder/process", new PlaceholderProcessorController());
-
         server.createContext("/console/vault/economy", new VaultEconomyController());
 
         RegisteredNamespace.add("/status");
