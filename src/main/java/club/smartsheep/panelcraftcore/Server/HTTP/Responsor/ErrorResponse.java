@@ -1,11 +1,10 @@
-package club.smartsheep.panelcraftcore.Common.Responsor;
+package club.smartsheep.panelcraftcore.Server.HTTP.Responsor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,8 +46,8 @@ public class ErrorResponse {
         }
     }
 
-    public static void BodyProcessErrorResponse(HttpExchange exchange, String formatNeed) {
-        CustomErrorResponse(exchange, "FormatBodyFailed", "Please check your body, this api require a " + formatNeed + " data.");
+    public static void BodyProcessErrorResponse(HttpExchange exchange, String reason) {
+        CustomErrorResponse(exchange, "FormatBodyFailed", "Please check your body, " + reason + ".");
     }
 
     public static void InsufficientPermissionsErrorResponse(HttpExchange exchange) {
@@ -61,6 +60,14 @@ public class ErrorResponse {
 
     public static void ModuleUnactivatedErrorResponse(HttpExchange exchange, String unactivatedModuleName) {
         CustomErrorResponse(exchange, "ModuleUnactivatedError", unactivatedModuleName + " module isn't activate, please check it api is hooked(installed) and reload try again!", 500);
+    }
+
+    public static void SQLErrorResponse(HttpExchange exchange, String state, String message) {
+        CustomErrorResponse(exchange, "SQLExecuteFailedError", "Execute script (state: " + state + ") failed with message: " + message, 500);
+    }
+
+    public static void MethodNotAllowResponse(HttpExchange exchange) {
+        CustomErrorResponse(exchange, "MethodNotAllowError", "This API do not allow you used method! Please query the developer document!", 405);
     }
 
     /**

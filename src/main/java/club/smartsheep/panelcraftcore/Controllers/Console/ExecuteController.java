@@ -2,9 +2,9 @@ package club.smartsheep.panelcraftcore.Controllers.Console;
 
 import club.smartsheep.panelcraftcore.Common.BodyProcessor;
 import club.smartsheep.panelcraftcore.Common.CommandExecutor;
-import club.smartsheep.panelcraftcore.Common.Responsor.ErrorResponse;
-import club.smartsheep.panelcraftcore.Common.Responsor.JSONResponse;
-import club.smartsheep.panelcraftcore.Common.Responsor.NullResponse;
+import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.ErrorResponse;
+import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.JSONResponse;
+import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.NullResponse;
 import club.smartsheep.panelcraftcore.Common.Tokens.CheckPassword;
 import club.smartsheep.panelcraftcore.PanelCraft;
 import com.sun.net.httpserver.HttpExchange;
@@ -13,8 +13,6 @@ import org.bukkit.Bukkit;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ExecuteController implements HttpHandler {
     @Override

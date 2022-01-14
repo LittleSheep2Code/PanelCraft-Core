@@ -1,5 +1,5 @@
 name: PanelCraft
 version: '${project.version}'
 main: club.smartsheep.panelcraftcore.PanelCraft
-api-version: 1.17
+api-version: 1.13
 softdepend: [PlaceholderAPI, Vault, ProtocolLib]

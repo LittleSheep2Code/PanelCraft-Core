@@ -29,13 +29,16 @@ public class DatabaseConnector {
 
     @SneakyThrows
     public Connection connect() {
-        String sqlname = PanelCraft.getPlugin(PanelCraft.class).getConfig().getString("database.sqlname");
-        File sqlfile = new File(PanelCraft.getPlugin(PanelCraft.class).getDataFolder(), sqlname + ".db");
-        if (!sqlfile.exists()) {
+        String sqlName = PanelCraft.getPlugin(PanelCraft.class).getConfig().getString("database.sqlname");
+        File sqlFile = new File(PanelCraft.getPlugin(PanelCraft.class).getDataFolder(), "data/" + sqlName + ".db");
+        if (!sqlFile.exists()) {
             try {
-                sqlfile.createNewFile();
+                if(!sqlFile.getParentFile().exists()) {
+                    new File(PanelCraft.getPlugin(PanelCraft.class).getDataFolder(), "data").mkdir();
+                }
+                sqlFile.createNewFile();
             } catch (IOException e) {
-                LOGGER.log(Level.SEVERE, "File write error: " + sqlname + ".db");
+                LOGGER.log(Level.SEVERE, "File write error: data/" + sqlName + ".db");
             }
         }
         try {
@@ -43,7 +46,7 @@ public class DatabaseConnector {
                 return DATABASE_SESSION;
             }
             Class.forName(CONNECTOR_DRIVER_NAME);
-            DATABASE_SESSION = DriverManager.getConnection("jdbc:sqlite:" + sqlfile);
+            DATABASE_SESSION = DriverManager.getConnection("jdbc:sqlite:" + sqlFile);
             return DATABASE_SESSION;
         } catch (SQLException e) {
             LOGGER.log(Level.SEVERE, "SQLite exception on initialize", e);

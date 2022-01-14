@@ -1,32 +1,25 @@
-package club.smartsheep.panelcraftcore.Controllers.Console.Placeholder;
+package club.smartsheep.panelcraftcore.Controllers.Console.Dangerous;
 
 import club.smartsheep.panelcraftcore.Common.BodyProcessor;
+import club.smartsheep.panelcraftcore.Common.Configure.DatabaseInitialization;
 import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.ErrorResponse;
 import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.JSONResponse;
 import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.NullResponse;
 import club.smartsheep.panelcraftcore.Common.Tokens.CheckPassword;
-import club.smartsheep.panelcraftcore.PanelCraft;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import me.clip.placeholderapi.PlaceholderAPI;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlaceholderProcessorController implements HttpHandler {
+public class CreateDatabaseController implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         if(!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
             NullResponse.Response(exchange, 405);
-            return;
-        }
-
-        if(!PanelCraft.HookStatues.getOrDefault("placeholderAPI", false)) {
-            ErrorResponse.ModuleUnactivatedErrorResponse(exchange, "placeholderAPI");
             return;
         }
 
@@ -43,28 +36,19 @@ public class PlaceholderProcessorController implements HttpHandler {
             else {
                 ErrorResponse.MissingArgumentsErrorResponse(exchange, "root password");
             }
+
             return;
         }
 
-        if(!body.has("message")) {
-            ErrorResponse.MissingArgumentsErrorResponse(exchange, "message");
-            return;
-        }
-
-        if(!body.has("player")) {
-            ErrorResponse.MissingArgumentsErrorResponse(exchange, "player");
-            return;
-        }
-
-        Player player = Bukkit.getPlayerExact(body.getString("player"));
-        if(player == null) {
-            ErrorResponse.DataErrorResponse(exchange, "Cannot use your provided player name get player!");
+        try {
+            DatabaseInitialization.setupDatabases();
+        } catch (SQLException e) {
+            ErrorResponse.SQLErrorResponse(exchange, e.getSQLState(), e.getMessage());
             return;
         }
 
         Map<String, Object> response = new HashMap<>();
         response.put("status", "success");
-        response.put("data", PlaceholderAPI.setPlaceholders(player, body.getString("message")));
 
         JSONResponse.Response(exchange, response, 200);
     }
