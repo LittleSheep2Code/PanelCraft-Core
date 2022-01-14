@@ -1,9 +1,9 @@
 package club.smartsheep.panelcraftcore.Controllers.Console.Placeholder;
 
 import club.smartsheep.panelcraftcore.Common.BodyProcessor;
-import club.smartsheep.panelcraftcore.Common.Responsor.ErrorResponse;
-import club.smartsheep.panelcraftcore.Common.Responsor.JSONResponse;
-import club.smartsheep.panelcraftcore.Common.Responsor.NullResponse;
+import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.ErrorResponse;
+import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.JSONResponse;
+import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.NullResponse;
 import club.smartsheep.panelcraftcore.Common.Tokens.CheckPassword;
 import club.smartsheep.panelcraftcore.PanelCraft;
 import com.sun.net.httpserver.HttpExchange;

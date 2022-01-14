@@ -1,7 +1,7 @@
 package club.smartsheep.panelcraftcore.Controllers;
 
-import club.smartsheep.panelcraftcore.Common.Responsor.JSONResponse;
-import club.smartsheep.panelcraftcore.Common.Responsor.NullResponse;
+import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.JSONResponse;
+import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.NullResponse;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.bukkit.Bukkit;

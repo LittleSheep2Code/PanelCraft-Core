@@ -30,19 +30,7 @@ public final class PanelCraft extends JavaPlugin {
     public static FileConfiguration getPanelConfigure() {
         return getPlugin(PanelCraft.class).getConfig();
     }
-
-    public static boolean registerHttpHandler(HttpHandler handler, String namespace, String path) {
-        if(!namespace.startsWith("/")) {
-            return false;
-        } else if(!path.startsWith("/")) {
-            return false;
-        } else if(PanelCraftWebserver.RegisteredNamespace.contains(namespace)) {
-            return false;
-        } else {
-            webserviceServer.createContext(namespace + path, handler);
-            return true;
-        }
-    }
+    public static Logger getPanelLogger() { return getPlugin(PanelCraft.class).getLogger(); }
 
     // ProtocolLib Hook
     public static ProtocolManager protocolManager;
@@ -59,9 +47,6 @@ public final class PanelCraft extends JavaPlugin {
         saveDefaultConfig();
 
         DatabaseConnector.get().connect();
-
-        // Webservice setup
-        PanelCraftWebserver.setup();
 
         // Start hooking
         VaultHook.hookVault();
