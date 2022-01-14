@@ -1,5 +1,5 @@
 package club.smartsheep.panelcraftcore.Server.HTTP;
 
 public abstract class PanelWebHandler {
-    public Object handle(PanelWebExchange exchange) { return ""; }
+    public void handle(PanelWebExchange exchange) {}
 }

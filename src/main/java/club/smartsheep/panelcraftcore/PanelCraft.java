@@ -4,9 +4,8 @@ import club.smartsheep.panelcraftcore.Common.Configure.DatabaseConnector;
 import club.smartsheep.panelcraftcore.Hooks.PlaceholderHook;
 import club.smartsheep.panelcraftcore.Hooks.ProtocolLibHook;
 import club.smartsheep.panelcraftcore.Hooks.VaultHook;
+import club.smartsheep.panelcraftcore.Server.HTTP.PanelWebServer;
 import com.comphenix.protocol.ProtocolManager;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
 import lombok.SneakyThrows;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -19,8 +18,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public final class PanelCraft extends JavaPlugin {
-
-    public static HttpServer webserviceServer;
 
     // Static Values
     public static Logger LOGGER;
@@ -48,6 +45,10 @@ public final class PanelCraft extends JavaPlugin {
 
         DatabaseConnector.get().connect();
 
+        // Web server Startup
+        PanelWebServer.get().autoAddRoute();
+        PanelWebServer.get().startup();
+
         // Start hooking
         VaultHook.hookVault();
         PlaceholderHook.hookPlaceholder();
@@ -61,7 +62,7 @@ public final class PanelCraft extends JavaPlugin {
     @Override
     public void onDisable() {
         // Close web server
-        webserviceServer.stop(1);
+        PanelWebServer.get().shutdown();
         // Close database connection
         DatabaseConnector.get().DATABASE_SESSION.close();
     }

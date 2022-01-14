@@ -82,7 +82,8 @@ public class PanelWebExchange {
         exchange.getResponseHeaders().put(type.name, value);
     }
 
-    public void send(String data) throws IOException {
+    public void send(String data, String contentType) throws IOException {
+        this.setHeader(HeaderTypes.CONTENT_TYPE, contentType);
         OutputStream responseStream = this.exchange.getResponseBody();
         this.exchange.sendResponseHeaders(this.statusCode, data.getBytes(StandardCharsets.UTF_8).length);
         responseStream.write(data.getBytes(StandardCharsets.UTF_8));
@@ -90,11 +91,15 @@ public class PanelWebExchange {
         responseStream.close();
     }
 
-    public void send(JSONObject data) throws IOException {
-        this.send(data.toString());
+    public void send(String data) throws IOException {
+        this.send(data, "plain/text");
     }
 
-    public void send(Map<Object, Object> data) throws IOException {
-        this.send(new JSONObject(data).toString());
+    public void send(JSONObject data) throws IOException {
+        this.send(data.toString(), "application/json");
+    }
+
+    public void send(Map<String, Object> data) throws IOException {
+        this.send(new JSONObject(data).toString(), "application/json");
     }
 }
