@@ -1,4 +1,4 @@
-webservice:
+webserver:
   port: 25564
 
 security:

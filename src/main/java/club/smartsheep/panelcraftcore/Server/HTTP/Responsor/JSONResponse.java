@@ -1,4 +1,4 @@
-package club.smartsheep.panelcraftcore.Common.Responsor;
+package club.smartsheep.panelcraftcore.Server.HTTP.Responsor;
 
 import club.smartsheep.panelcraftcore.PanelCraft;
 import com.sun.net.httpserver.HttpExchange;
