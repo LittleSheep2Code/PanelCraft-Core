@@ -82,6 +82,8 @@ public class PanelWebExchange {
         exchange.getResponseHeaders().put(type.name, value);
     }
 
+    public PanelWebErrorSender getErrorSender() { return new PanelWebErrorSender(this); }
+
     public void send(String data, String contentType) throws IOException {
         this.setHeader(HeaderTypes.CONTENT_TYPE, contentType);
         OutputStream responseStream = this.exchange.getResponseBody();

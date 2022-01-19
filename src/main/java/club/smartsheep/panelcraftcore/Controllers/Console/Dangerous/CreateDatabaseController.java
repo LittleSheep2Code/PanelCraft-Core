@@ -1,55 +1,30 @@
 package club.smartsheep.panelcraftcore.Controllers.Console.Dangerous;
 
-import club.smartsheep.panelcraftcore.Common.BodyProcessor;
 import club.smartsheep.panelcraftcore.Common.Configure.DatabaseInitialization;
-import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.ErrorResponse;
-import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.JSONResponse;
-import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.NullResponse;
-import club.smartsheep.panelcraftcore.Common.Tokens.CheckPassword;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import org.json.JSONObject;
+import club.smartsheep.panelcraftcore.Server.HTTP.PanelWebExchange;
+import club.smartsheep.panelcraftcore.Server.HTTP.PanelWebHandler;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CreateDatabaseController implements HttpHandler {
+public class CreateDatabaseController extends PanelWebHandler {
     @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        if(!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
-            NullResponse.Response(exchange, 405);
-            return;
-        }
-
-        JSONObject body = BodyProcessor.getJSONObject(exchange);
-        if(body == null) {
-            ErrorResponse.BodyProcessErrorResponse(exchange, "JSON");
-            return;
-        }
-
-        if(!body.has("password") || !CheckPassword.checkRootPassword(body.getString("password"))) {
-            if(body.has("password")) {
-                ErrorResponse.InsufficientPermissionsErrorResponse(exchange);
-            }
-            else {
-                ErrorResponse.MissingArgumentsErrorResponse(exchange, "root password");
-            }
-
-            return;
-        }
-
+    public void handle(PanelWebExchange exchange) {
         try {
             DatabaseInitialization.setupDatabases();
-        } catch (SQLException e) {
-            ErrorResponse.SQLErrorResponse(exchange, e.getSQLState(), e.getMessage());
+        } catch (Exception e) {
+            exchange.getErrorSender().SQLErrorResponse(null, "Error when creating database");
             return;
         }
 
         Map<String, Object> response = new HashMap<>();
         response.put("status", "success");
 
-        JSONResponse.Response(exchange, response, 200);
+        try {
+            exchange.send(response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

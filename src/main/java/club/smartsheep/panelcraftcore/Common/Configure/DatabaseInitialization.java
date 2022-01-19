@@ -1,20 +1,29 @@
 package club.smartsheep.panelcraftcore.Common.Configure;
 
-import lombok.SneakyThrows;
+import club.smartsheep.panelcraftcore.PanelCraft;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DatabaseInitialization {
     public static void setupDatabases() throws SQLException {
-        DatabaseConnector.get().DATABASE_SESSION.createStatement().execute("create table if not exists activities\n" +
-                "(\n" +
-                "    id          int auto_increment\n" +
-                "        primary key,\n" +
-                "    context     text     not null,\n" +
-                "    submitter   text     not null,\n" +
-                "    create_time datetime not null,\n" +
-                "    constraint activities_id_uindex\n" +
-                "        unique (id)\n" +
+        StringBuilder builder = new StringBuilder();
+
+        // Admin Tables
+        // Event records table
+        builder.append("CREATE TABLE IF NOT EXISTS \"admin__event_records\" (\n" +
+                "  \"id\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                "  \"executor\" text,\n" +
+                "  \"content\" text,\n" +
+                "  \"execute_time\" text\n" +
                 ");");
+
+        if(DatabaseConnector.get().connect() == null || DatabaseConnector.get().connect().isClosed()) {
+            return;
+        }
+        PreparedStatement statement = DatabaseConnector.get().connect().prepareStatement(builder.toString());
+
+        statement.execute();
+        statement.close();
     }
 }

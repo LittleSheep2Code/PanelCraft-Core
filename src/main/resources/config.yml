@@ -5,4 +5,4 @@ security:
   root: root@password@please@change@it
 
 database:
-  sqlname: "database"
+  name: "database"

@@ -64,6 +64,6 @@ public final class PanelCraft extends JavaPlugin {
         // Close web server
         PanelWebServer.get().shutdown();
         // Close database connection
-        DatabaseConnector.get().DATABASE_SESSION.close();
+        DatabaseConnector.get().connect().close();
     }
 }
