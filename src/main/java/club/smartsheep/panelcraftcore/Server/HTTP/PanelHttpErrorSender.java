@@ -5,10 +5,10 @@ import lombok.SneakyThrows;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PanelWebErrorSender {
-    private PanelWebExchange exchange;
+public class PanelHttpErrorSender {
+    private PanelHttpExchange exchange;
 
-    public PanelWebErrorSender(PanelWebExchange exchange) {
+    public PanelHttpErrorSender(PanelHttpExchange exchange) {
         this.exchange = exchange;
     }
 

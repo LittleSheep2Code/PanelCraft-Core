@@ -1,22 +1,17 @@
 package club.smartsheep.panelcraftcore.Controllers.Status;
 
 import club.smartsheep.panelcraftcore.Common.Configure.DatabaseConnector;
-import club.smartsheep.panelcraftcore.Server.HTTP.PanelWebExchange;
-import club.smartsheep.panelcraftcore.Server.HTTP.PanelWebHandler;
-import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.JSONResponse;
-import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.NullResponse;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
+import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpExchange;
+import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpHandler;
 import lombok.SneakyThrows;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DatabaseStatusController extends PanelWebHandler {
+public class DatabaseStatusController extends PanelHttpHandler {
     @Override
     @SneakyThrows
-    public void handle(PanelWebExchange exchange) {
+    public void handle(PanelHttpExchange exchange) {
         try {
             boolean threeSecond = DatabaseConnector.get().connect().isValid(3);
             boolean thirtySecond = DatabaseConnector.get().connect().isValid(30);

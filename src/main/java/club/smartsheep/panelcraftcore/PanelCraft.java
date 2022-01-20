@@ -5,7 +5,7 @@ import club.smartsheep.panelcraftcore.Modules.Hooks.PlaceholderHook;
 import club.smartsheep.panelcraftcore.Modules.Hooks.ProtocolLibHook;
 import club.smartsheep.panelcraftcore.Modules.Hooks.VaultHook;
 import club.smartsheep.panelcraftcore.Modules.Security.RootRandomPasswordGenerator;
-import club.smartsheep.panelcraftcore.Server.HTTP.PanelWebServer;
+import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpServer;
 import com.comphenix.protocol.ProtocolManager;
 import lombok.SneakyThrows;
 import net.milkbowl.vault.chat.Chat;
@@ -47,8 +47,8 @@ public final class PanelCraft extends JavaPlugin {
         DatabaseConnector.get().connect();
 
         // Web server Startup
-        PanelWebServer.get().autoAddRoute();
-        PanelWebServer.get().startup();
+        PanelHttpServer.get().autoAddRoute();
+        PanelHttpServer.get().startup();
 
         // Start automatic update root password
         RootRandomPasswordGenerator.startup();
@@ -66,7 +66,7 @@ public final class PanelCraft extends JavaPlugin {
     @Override
     public void onDisable() {
         // Close web server
-        PanelWebServer.get().shutdown();
+        PanelHttpServer.get().shutdown();
         // Close database connection
         DatabaseConnector.get().connect().close();
     }

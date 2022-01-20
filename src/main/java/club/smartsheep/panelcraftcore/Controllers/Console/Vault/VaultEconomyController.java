@@ -1,29 +1,21 @@
 package club.smartsheep.panelcraftcore.Controllers.Console.Vault;
 
-import club.smartsheep.panelcraftcore.Common.BodyProcessor;
 import club.smartsheep.panelcraftcore.Common.Loggers.ErrorLoggers;
-import club.smartsheep.panelcraftcore.Server.HTTP.PanelWebExchange;
-import club.smartsheep.panelcraftcore.Server.HTTP.PanelWebHandler;
-import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.ErrorResponse;
-import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.JSONResponse;
-import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.NullResponse;
-import club.smartsheep.panelcraftcore.Common.Tokens.CheckPassword;
+import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpExchange;
+import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpHandler;
 import club.smartsheep.panelcraftcore.PanelCraft;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VaultEconomyController extends PanelWebHandler {
+public class VaultEconomyController extends PanelHttpHandler {
     @Override
     @SneakyThrows
-    public void handle(PanelWebExchange exchange) {
+    public void handle(PanelHttpExchange exchange) {
         if(!PanelCraft.HookStatues.getOrDefault("vault.economy", false)) {
             new ErrorLoggers().ModuleDoNotEnable("Vault Economy");
             exchange.getErrorSender().ModuleUnactivatedErrorResponse("Vault Economy");

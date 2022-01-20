@@ -1,30 +1,22 @@
 package club.smartsheep.panelcraftcore.Controllers.Console.Placeholder;
 
-import club.smartsheep.panelcraftcore.Common.BodyProcessor;
 import club.smartsheep.panelcraftcore.Common.Loggers.ErrorLoggers;
-import club.smartsheep.panelcraftcore.Server.HTTP.PanelWebExchange;
-import club.smartsheep.panelcraftcore.Server.HTTP.PanelWebHandler;
-import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.ErrorResponse;
-import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.JSONResponse;
-import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.NullResponse;
-import club.smartsheep.panelcraftcore.Common.Tokens.CheckPassword;
+import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpExchange;
+import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpHandler;
 import club.smartsheep.panelcraftcore.PanelCraft;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import lombok.SneakyThrows;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlaceholderProcessorController extends PanelWebHandler {
+public class PlaceholderProcessorController extends PanelHttpHandler {
     @Override
     @SneakyThrows
-    public void handle(PanelWebExchange exchange) {
+    public void handle(PanelHttpExchange exchange) {
         if(!PanelCraft.HookStatues.getOrDefault("placeholderAPI", false)) {
             new ErrorLoggers().ModuleDoNotEnable("placeholderAPI");
             exchange.getErrorSender().ModuleUnactivatedErrorResponse("placeholderAPI");
