@@ -1,4 +1,4 @@
-package club.smartsheep.panelcraftcore.Controllers.Console.Dangerous;
+package club.smartsheep.panelcraftcore.Controllers.Dangerous.Initialize;
 
 import club.smartsheep.panelcraftcore.Common.Configure.DatabaseInitialization;
 import club.smartsheep.panelcraftcore.Server.HTTP.PanelWebExchange;

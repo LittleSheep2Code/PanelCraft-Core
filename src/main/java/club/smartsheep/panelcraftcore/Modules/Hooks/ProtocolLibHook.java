@@ -1,5 +1,7 @@
-package club.smartsheep.panelcraftcore.Hooks;
+package club.smartsheep.panelcraftcore.Modules.Hooks;
 
+import club.smartsheep.panelcraftcore.Common.Loggers.ErrorLoggers;
+import club.smartsheep.panelcraftcore.Common.Loggers.LoadingStateLoggers;
 import com.comphenix.protocol.ProtocolLibrary;
 import org.bukkit.Bukkit;
 
@@ -10,9 +12,10 @@ public class ProtocolLibHook {
         if(Bukkit.getPluginManager().getPlugin("ProtocolLib") != null) {
             protocolManager = ProtocolLibrary.getProtocolManager();
             HookStatues.put("ProtocolLib", true);
+            new LoadingStateLoggers().ModuleLoaded("ProtocolLib");
         }
 
         HookStatues.put("ProtocolLib", false);
-        LOGGER.warning("Failed to hook into ProtocolLib, please check ProtocolLib is installed. ProtocolLib need feature is disabled.");
+        new ErrorLoggers().ModuleDoNotEnable("ProtocolLib");
     }
 }

@@ -1,4 +1,4 @@
-package club.smartsheep.panelcraftcore.Hooks;
+package club.smartsheep.panelcraftcore.Modules.Hooks;
 
 import club.smartsheep.panelcraftcore.Common.Loggers.ErrorLoggers;
 import club.smartsheep.panelcraftcore.Common.Loggers.LoadingStateLoggers;

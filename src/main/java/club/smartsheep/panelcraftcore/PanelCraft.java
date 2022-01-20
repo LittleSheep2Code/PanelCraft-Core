@@ -1,9 +1,10 @@
 package club.smartsheep.panelcraftcore;
 
 import club.smartsheep.panelcraftcore.Common.Configure.DatabaseConnector;
-import club.smartsheep.panelcraftcore.Hooks.PlaceholderHook;
-import club.smartsheep.panelcraftcore.Hooks.ProtocolLibHook;
-import club.smartsheep.panelcraftcore.Hooks.VaultHook;
+import club.smartsheep.panelcraftcore.Modules.Hooks.PlaceholderHook;
+import club.smartsheep.panelcraftcore.Modules.Hooks.ProtocolLibHook;
+import club.smartsheep.panelcraftcore.Modules.Hooks.VaultHook;
+import club.smartsheep.panelcraftcore.Modules.Security.RootRandomPasswordGenerator;
 import club.smartsheep.panelcraftcore.Server.HTTP.PanelWebServer;
 import com.comphenix.protocol.ProtocolManager;
 import lombok.SneakyThrows;
@@ -48,6 +49,9 @@ public final class PanelCraft extends JavaPlugin {
         // Web server Startup
         PanelWebServer.get().autoAddRoute();
         PanelWebServer.get().startup();
+
+        // Start automatic update root password
+        RootRandomPasswordGenerator.startup();
 
         // Start hooking
         VaultHook.hookVault();
