@@ -54,9 +54,12 @@ public class PanelHttpErrorSender {
         this.CustomErrorResponse("MethodNotAllowError", "This API do not allow you used method! Please query the developer document!", 405);
     }
 
+    public void MissingHeaderErrorResponse(String missingThings) {
+        this.CustomErrorResponse("MissingHeaders", "Missing " + missingThings + ".");
+    }
+
     /**
      * Return missing parameter error response
-     * @param exchange The handler can handle parameter
      * @param missingThings What parameter missed, split by space
      */
     public void MissingArgumentsErrorResponse(String missingThings) {

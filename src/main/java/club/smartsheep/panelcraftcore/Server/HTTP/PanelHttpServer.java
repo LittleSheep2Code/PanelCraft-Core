@@ -97,7 +97,7 @@ public class PanelHttpServer {
                 case ROOT:
                     String authorizationCode = exchange.getRequestHeaders().get("Authorization-Code").get(0);
                     if (authorizationCode == null) {
-                        wExchange.getErrorSender().MissingArgumentsErrorResponse("root authorizationCode");
+                        wExchange.getErrorSender().MissingHeaderErrorResponse("Authorization-Code");
                         return;
                     }
                     if (!CheckPassword.checkRootPassword(authorizationCode)) {
