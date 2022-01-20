@@ -95,13 +95,13 @@ public class PanelHttpServer {
             PanelHttpExchange wExchange = new PanelHttpExchange(exchange);
             switch (security) {
                 case ROOT:
-                    String password = exchange.getRequestHeaders().get("Authorization-Code").get(0);
-                    if (password != null) {
-                        wExchange.getErrorSender().InsufficientPermissionsErrorResponse();
+                    String authorizationCode = exchange.getRequestHeaders().get("Authorization-Code").get(0);
+                    if (authorizationCode == null) {
+                        wExchange.getErrorSender().MissingArgumentsErrorResponse("root authorizationCode");
                         return;
                     }
-                    if (!CheckPassword.checkRootPassword(password)) {
-                        wExchange.getErrorSender().MissingArgumentsErrorResponse("root password");
+                    if (!CheckPassword.checkRootPassword(authorizationCode)) {
+                        wExchange.getErrorSender().InsufficientPermissionsErrorResponse();
                         return;
                     }
                     break;
