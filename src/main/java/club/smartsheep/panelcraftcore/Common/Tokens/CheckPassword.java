@@ -3,6 +3,8 @@ package club.smartsheep.panelcraftcore.Common.Tokens;
 import club.smartsheep.panelcraftcore.Modules.Security.RootRandomPasswordGenerator;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.util.List;
+
 public class CheckPassword {
     /**
      *

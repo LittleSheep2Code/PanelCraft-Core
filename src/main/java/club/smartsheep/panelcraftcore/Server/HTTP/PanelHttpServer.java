@@ -10,6 +10,7 @@ import club.smartsheep.panelcraftcore.Controllers.Dangerous.Initialize.CreateDat
 import club.smartsheep.panelcraftcore.Controllers.Dangerous.ReloadController;
 import club.smartsheep.panelcraftcore.Controllers.Dangerous.ShutdownController;
 import club.smartsheep.panelcraftcore.Controllers.DetailController;
+import club.smartsheep.panelcraftcore.Controllers.Security.UserManagement.CreateAccountController;
 import club.smartsheep.panelcraftcore.PanelCraft;
 import club.smartsheep.panelcraftcore.Server.HTTP.Errors.RouteRegisterError;
 import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.ErrorResponse;
@@ -18,6 +19,7 @@ import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.List;
 
 public class PanelHttpServer {
     public enum RequestMethod {
@@ -95,12 +97,12 @@ public class PanelHttpServer {
             PanelHttpExchange wExchange = new PanelHttpExchange(exchange);
             switch (security) {
                 case ROOT:
-                    String authorizationCode = exchange.getRequestHeaders().get("Authorization-Code").get(0);
-                    if (authorizationCode == null) {
+                    List<String> authorizationCode = exchange.getRequestHeaders().get("Authorization-Code");
+                    if (authorizationCode == null || authorizationCode.size() <= 0) {
                         wExchange.getErrorSender().MissingHeaderErrorResponse("Authorization-Code");
                         return;
                     }
-                    if (!CheckPassword.checkRootPassword(authorizationCode)) {
+                    if (!CheckPassword.checkRootPassword(authorizationCode.get(0))) {
                         wExchange.getErrorSender().InsufficientPermissionsErrorResponse();
                         return;
                     }
@@ -122,7 +124,8 @@ public class PanelHttpServer {
         this.addRoute(RequestMethod.PUT, SecurityLevel.ROOT, new PlaceholderProcessorController(), "/console/placeholder");
         this.addRoute(RequestMethod.PATCH, SecurityLevel.ROOT, new ReloadController(), "/danger-zone/reload");
         this.addRoute(RequestMethod.PATCH, SecurityLevel.ROOT, new ShutdownController(), "/danger-zone/shutdown");
-        this.addRoute(RequestMethod.PATCH, SecurityLevel.ROOT, new CreateDatabaseController(), "/danger-zone/initialize/setup-database");
+        this.addRoute(RequestMethod.PATCH, SecurityLevel.ROOT, new CreateDatabaseController(), "/danger-zone/initialize/database");
+        this.addRoute(RequestMethod.PUT, SecurityLevel.ROOT, new CreateAccountController(), "/security/account-management/create");
     }
 
     public void startup() {

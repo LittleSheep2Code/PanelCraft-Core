@@ -47,7 +47,7 @@ public class PanelHttpErrorSender {
     }
 
     public void SQLErrorResponse(String state, String message) {
-        this.CustomErrorResponse("SQLExecuteFailedError", "Execute script (state: " + state + ") failed with message: " + message, 500);
+        this.CustomErrorResponse("SQLExecuteFailedError", "Execute script (state: " + state + ") failed with message: " + message + "; Detail message please view at server console!", 500);
     }
 
     public void MethodNotAllowResponse() {
