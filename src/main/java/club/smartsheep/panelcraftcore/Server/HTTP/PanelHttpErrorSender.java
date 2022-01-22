@@ -60,7 +60,7 @@ public class PanelHttpErrorSender {
 
     /**
      * Return missing parameter error response
-     * @param missingThings What parameter missed, split by space
+     * @param missingThings What parameter are missing.
      */
     public void MissingArgumentsErrorResponse(String missingThings) {
         this.CustomErrorResponse("MissingArguments", "Missing " + missingThings + ".");

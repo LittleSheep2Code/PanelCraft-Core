@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class CommonToken {
 
-    public String summonToken(long expire, String secret) {
+    public static String summonToken(long expire, String secret) {
         String token = "";
         try {
             Date date = new Date(System.currentTimeMillis() + expire);
@@ -30,7 +30,7 @@ public class CommonToken {
         return token;
     }
 
-    public String summonToken(String secret) {
+    public static String summonToken(String secret) {
         String token = "";
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);

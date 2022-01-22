@@ -3,7 +3,6 @@ package club.smartsheep.panelcraftcore.Modules.Security;
 import club.smartsheep.panelcraftcore.Common.Tokens.DynamicPasswordGenerator;
 import club.smartsheep.panelcraftcore.PanelCraft;
 import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class RootRandomPasswordGenerator {
     public static String CurrentRootPassword;
@@ -21,6 +20,6 @@ public class RootRandomPasswordGenerator {
             PanelCraft.LOGGER.info("§a[*] §eAfter update root password is: §6" + CurrentRootPassword);
             PanelCraft.LOGGER.info("§a[*] §lRoot password has been updated.");
             PanelCraft.LOGGER.info("");
-        }, 86400, 0);
+        }, 86400 * 20, 86400 * 20);
     }
 }

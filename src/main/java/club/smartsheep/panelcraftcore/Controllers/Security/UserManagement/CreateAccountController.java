@@ -1,12 +1,13 @@
 package club.smartsheep.panelcraftcore.Controllers.Security.UserManagement;
 
 import club.smartsheep.panelcraftcore.Common.Configure.DatabaseConnector;
-import club.smartsheep.panelcraftcore.Common.Configure.DatabaseInitialization;
 import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpExchange;
 import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpHandler;
 import lombok.SneakyThrows;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.json.JSONObject;
 
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,9 +22,23 @@ public class CreateAccountController extends PanelHttpHandler {
             return;
         }
 
+        // Check registered
+        String script = String.format("SELECT COUNT(*) FROM system__accounts WHERE username='%s'", body.getString("username"));
+        try {
+            Statement statement = DatabaseConnector.get().connect().createStatement();
+            ResultSet set = statement.executeQuery(script);
+            if(set.getInt("COUNT(*)") != 0) {
+                exchange.getErrorSender().DataErrorResponse("This username is repeated, please change it");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            exchange.getErrorSender().SQLErrorResponse(null, "Error when creating account(script: " + script + ")");
+            return;
+        }
+
         // Build script
         String insert_columns = "'username', 'password'";
-        String insert_values = String.format("'%s', '%s'", body.getString("username"), body.getString("password"));
+        String insert_values = String.format("'%s', '%s'", body.getString("username"), DigestUtils.md5Hex(body.getString("password")));
 
         if(body.has("permissions")) {
             insert_columns += ", 'permissions'";
@@ -45,7 +60,7 @@ public class CreateAccountController extends PanelHttpHandler {
             insert_values += String.format(", '%s'", body.get("description"));
         }
 
-        String script = String.format("INSERT INTO  'system__accounts' (%s) VALUES (%s);", insert_columns, insert_values);
+        script = String.format("INSERT INTO  'system__accounts' (%s) VALUES (%s);", insert_columns, insert_values);
 
         // Execute script
         try {

@@ -2,6 +2,7 @@ package club.smartsheep.panelcraftcore.Server.HTTP;
 
 import club.smartsheep.panelcraftcore.Common.Loggers.ErrorLoggers;
 import club.smartsheep.panelcraftcore.Common.Loggers.LoadingStateLoggers;
+import club.smartsheep.panelcraftcore.Common.Tokens.CheckAuthorizationToken;
 import club.smartsheep.panelcraftcore.Common.Tokens.CheckPassword;
 import club.smartsheep.panelcraftcore.Controllers.Console.ExecuteController;
 import club.smartsheep.panelcraftcore.Controllers.Console.Placeholder.PlaceholderProcessorController;
@@ -10,6 +11,7 @@ import club.smartsheep.panelcraftcore.Controllers.Dangerous.Initialize.CreateDat
 import club.smartsheep.panelcraftcore.Controllers.Dangerous.ReloadController;
 import club.smartsheep.panelcraftcore.Controllers.Dangerous.ShutdownController;
 import club.smartsheep.panelcraftcore.Controllers.DetailController;
+import club.smartsheep.panelcraftcore.Controllers.Security.AuthorizationController;
 import club.smartsheep.panelcraftcore.Controllers.Security.UserManagement.CreateAccountController;
 import club.smartsheep.panelcraftcore.PanelCraft;
 import club.smartsheep.panelcraftcore.Server.HTTP.Errors.RouteRegisterError;
@@ -19,6 +21,7 @@ import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.sql.SQLException;
 import java.util.List;
 
 public class PanelHttpServer {
@@ -39,7 +42,6 @@ public class PanelHttpServer {
     }
 
     public enum SecurityLevel {
-        ANYONE,
         PLAYER,
         ADMIN,
         ROOT
@@ -96,8 +98,42 @@ public class PanelHttpServer {
             }
             PanelHttpExchange wExchange = new PanelHttpExchange(exchange);
             switch (security) {
-                case ROOT:
+                case PLAYER:
                     List<String> authorizationCode = exchange.getRequestHeaders().get("Authorization-Code");
+                    if (authorizationCode == null || authorizationCode.size() <= 0) {
+                        wExchange.getErrorSender().MissingHeaderErrorResponse("Authorization-Code");
+                        return;
+                    }
+                    try {
+                        if (!CheckAuthorizationToken.check(authorizationCode.get(0))) {
+                            wExchange.getErrorSender().InsufficientPermissionsErrorResponse();
+                            return;
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        wExchange.getErrorSender().SQLErrorResponse(e.getSQLState(), "when check your authorization code, error occurred");
+                        return;
+                    }
+                    break;
+                case ADMIN:
+                    authorizationCode = exchange.getRequestHeaders().get("Authorization-Code");
+                    if (authorizationCode == null || authorizationCode.size() <= 0) {
+                        wExchange.getErrorSender().MissingHeaderErrorResponse("Authorization-Code");
+                        return;
+                    }
+                    try {
+                        if (!CheckAuthorizationToken.check(authorizationCode.get(0), "ADMIN")) {
+                            wExchange.getErrorSender().InsufficientPermissionsErrorResponse();
+                            return;
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        wExchange.getErrorSender().SQLErrorResponse(e.getSQLState(), "when check your authorization code, error occurred");
+                        return;
+                    }
+                    break;
+                case ROOT:
+                    authorizationCode = exchange.getRequestHeaders().get("Authorization-Code");
                     if (authorizationCode == null || authorizationCode.size() <= 0) {
                         wExchange.getErrorSender().MissingHeaderErrorResponse("Authorization-Code");
                         return;
@@ -120,12 +156,13 @@ public class PanelHttpServer {
     public void autoAddRoute() {
         this.addRoute(RequestMethod.GET, new DetailController(), "/");
         this.addRoute(RequestMethod.PUT, SecurityLevel.ROOT, new ExecuteController(), "/console");
-        this.addRoute(RequestMethod.PUT, SecurityLevel.ROOT, new VaultEconomyController(), "/console/vault/economy");
-        this.addRoute(RequestMethod.PUT, SecurityLevel.ROOT, new PlaceholderProcessorController(), "/console/placeholder");
-        this.addRoute(RequestMethod.PATCH, SecurityLevel.ROOT, new ReloadController(), "/danger-zone/reload");
+        this.addRoute(RequestMethod.PUT, SecurityLevel.ADMIN, new VaultEconomyController(), "/console/vault/economy");
+        this.addRoute(RequestMethod.PUT, SecurityLevel.ADMIN, new PlaceholderProcessorController(), "/console/placeholder");
+        this.addRoute(RequestMethod.PATCH, SecurityLevel.ADMIN, new ReloadController(), "/danger-zone/reload");
         this.addRoute(RequestMethod.PATCH, SecurityLevel.ROOT, new ShutdownController(), "/danger-zone/shutdown");
-        this.addRoute(RequestMethod.PATCH, SecurityLevel.ROOT, new CreateDatabaseController(), "/danger-zone/initialize/database");
+        this.addRoute(RequestMethod.PATCH, SecurityLevel.ADMIN, new CreateDatabaseController(), "/danger-zone/initialize/database");
         this.addRoute(RequestMethod.PUT, SecurityLevel.ROOT, new CreateAccountController(), "/security/account-management/create");
+        this.addRoute(RequestMethod.PUT, new AuthorizationController(), "/security/authorization");
     }
 
     public void startup() {
