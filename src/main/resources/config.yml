@@ -1,8 +1,5 @@
 webserver:
   port: 25564
 
-security:
-  root: root@password@please@change@it
-
 database:
-  sqlname: "database"
+  name: "database"

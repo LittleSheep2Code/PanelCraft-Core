@@ -1,17 +1,17 @@
 package club.smartsheep.panelcraftcore.Controllers;
 
-import club.smartsheep.panelcraftcore.Server.HTTP.PanelWebExchange;
-import club.smartsheep.panelcraftcore.Server.HTTP.PanelWebHandler;
+import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpExchange;
+import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpHandler;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class DetailController extends PanelWebHandler {
+public class DetailController extends PanelHttpHandler {
     @Override
     @SneakyThrows
-    public void handle(PanelWebExchange exchange) {
+    public void handle(PanelHttpExchange exchange) {
         Map<String, Object> response = new HashMap<>();
         response.put("status", "running");
 

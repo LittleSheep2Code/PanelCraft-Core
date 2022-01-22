@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class PanelWebExchange {
+public class PanelHttpExchange {
     public enum HeaderTypes {
         CONTENT_TYPE("Content-Type");
 
@@ -26,7 +26,7 @@ public class PanelWebExchange {
 
     private int statusCode = 200;
 
-    public PanelWebExchange(HttpExchange exchange) {
+    public PanelHttpExchange(HttpExchange exchange) {
         this.exchange = exchange;
     }
 
@@ -80,6 +80,15 @@ public class PanelWebExchange {
 
     public void setHeader(HeaderTypes type, List<String> value) {
         exchange.getResponseHeaders().put(type.name, value);
+    }
+
+    public PanelHttpErrorSender getErrorSender() { return new PanelHttpErrorSender(this); }
+
+    public void send() throws IOException {
+        OutputStream responseStream = this.exchange.getResponseBody();
+        this.exchange.sendResponseHeaders(this.statusCode, 0);
+        responseStream.flush();
+        responseStream.close();
     }
 
     public void send(String data, String contentType) throws IOException {

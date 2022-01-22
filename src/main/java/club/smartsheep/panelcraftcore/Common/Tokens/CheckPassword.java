@@ -1,11 +1,9 @@
 package club.smartsheep.panelcraftcore.Common.Tokens;
 
-import club.smartsheep.panelcraftcore.PanelCraft;
+import club.smartsheep.panelcraftcore.Modules.Security.RootRandomPasswordGenerator;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 public class CheckPassword {
     /**
@@ -14,7 +12,7 @@ public class CheckPassword {
      * @return Is the password correct
      */
     public static boolean checkRootPassword(String password) {
-        String rootPassword = DigestUtils.md5Hex(PanelCraft.getPlugin(PanelCraft.class).getConfig().getString("security.root"));
+        String rootPassword = DigestUtils.md5Hex(RootRandomPasswordGenerator.CurrentRootPassword);
         return password.equalsIgnoreCase(rootPassword);
     }
 }
