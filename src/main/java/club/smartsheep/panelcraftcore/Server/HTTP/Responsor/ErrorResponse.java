@@ -1,7 +1,7 @@
 package club.smartsheep.panelcraftcore.Server.HTTP.Responsor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -19,8 +19,8 @@ public class ErrorResponse {
             response.put("message", errorMessage);
 
             OutputStream responseBody = exchange.getResponseBody();
-            exchange.sendResponseHeaders(400, new ObjectMapper().writeValueAsString(response).length());
-            responseBody.write(new ObjectMapper().writeValueAsString(response).getBytes());
+            exchange.sendResponseHeaders(400, new JSONObject(response).toString().length());
+            responseBody.write(new JSONObject(response).toString().getBytes());
             responseBody.flush();
             responseBody.close();
         } catch (IOException e) {
@@ -37,8 +37,8 @@ public class ErrorResponse {
             response.put("message", errorMessage);
 
             OutputStream responseBody = exchange.getResponseBody();
-            exchange.sendResponseHeaders(statusCode, new ObjectMapper().writeValueAsString(response).length());
-            responseBody.write(new ObjectMapper().writeValueAsString(response).getBytes());
+            exchange.sendResponseHeaders(statusCode, new JSONObject(response).toString().length());
+            responseBody.write(new JSONObject(response).toString().getBytes());
             responseBody.flush();
             responseBody.close();
         } catch (IOException e) {
