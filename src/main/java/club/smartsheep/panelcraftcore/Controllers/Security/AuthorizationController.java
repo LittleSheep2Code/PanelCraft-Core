@@ -1,5 +1,6 @@
 package club.smartsheep.panelcraftcore.Controllers.Security;
 
+import club.smartsheep.panelcraftcore.Common.ActionRecorder.RecordAction;
 import club.smartsheep.panelcraftcore.Common.Configure.DatabaseConnector;
 import club.smartsheep.panelcraftcore.Common.Tokens.CommonToken;
 import club.smartsheep.panelcraftcore.Common.Tokens.SummonAuthorizationToken;
@@ -48,6 +49,8 @@ public class AuthorizationController extends PanelHttpHandler {
         }
 
         String token = SummonAuthorizationToken.summonToken(604800, body.getString("username"), body.getString("password"));
+
+        RecordAction.recordDown(body.getString("username"), "Login", exchange.getClientIP());
 
         Map<String, Object> response = new HashMap<>();
         response.put("status", "success");

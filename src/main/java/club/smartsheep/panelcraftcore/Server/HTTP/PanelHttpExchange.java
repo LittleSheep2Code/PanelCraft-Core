@@ -82,6 +82,22 @@ public class PanelHttpExchange {
         exchange.getResponseHeaders().put(type.name, value);
     }
 
+    public String getHeader(String name) {
+        return exchange.getResponseHeaders().get(name).get(0);
+    }
+
+    public String getHeader(String name, int index) {
+        return exchange.getResponseHeaders().get(name).get(index);
+    }
+
+    public List<String> getHeaders(String name) {
+        return exchange.getResponseHeaders().get(name);
+    }
+
+    public String getClientIP() {
+        return exchange.getRemoteAddress().getAddress().getHostAddress();
+    }
+
     public PanelHttpErrorSender getErrorSender() { return new PanelHttpErrorSender(this); }
 
     public void send() throws IOException {

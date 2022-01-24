@@ -7,6 +7,12 @@ import java.util.logging.Logger;
 public class ErrorLoggers {
     private Logger PluginLogger = PanelCraft.getPanelLogger();
 
+    public void FailedRecordDown(String script) {
+        PluginLogger.warning("");
+        PluginLogger.warning("§c[!] §e§l[ALERT] §r§eFailed to record down! Script: " + script);
+        PluginLogger.warning("");
+    }
+
     public void ModuleDoNotEnable(String module) {
         PluginLogger.warning("");
         PluginLogger.warning("§c[!] §e§l[ALERT] §r§eModule §6" + module + " §ehasn't hooked, require that feature has been disabled!");
