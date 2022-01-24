@@ -4,8 +4,12 @@ import club.smartsheep.panelcraftcore.Common.ActionRecorder.RecordAction;
 import club.smartsheep.panelcraftcore.Common.Tokens.DynamicPasswordGenerator;
 import club.smartsheep.panelcraftcore.PanelCraft;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
-public class RootRandomPasswordGenerator {
+public class RootRandomPasswordGenerator implements CommandExecutor {
     public static String CurrentRootPassword;
 
     public static void startup() {
@@ -23,5 +27,18 @@ public class RootRandomPasswordGenerator {
             PanelCraft.LOGGER.info("§a[*] §lRoot password has been updated.");
             PanelCraft.LOGGER.info("");
         }, 86400 * 20, 86400 * 20);
+    }
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if(!sender.isOp()) {
+            return false;
+        }
+
+        PanelCraft.LOGGER.info("§a[*] §lManual updated the root password.");
+        CurrentRootPassword = new DynamicPasswordGenerator().GenerateRandomPassword(DynamicPasswordGenerator.PasswordStrength.strong);
+        sender.sendMessage("§a[*] §lThe root password has been refreshed, the new password is: §6" + CurrentRootPassword);
+
+        return true;
     }
 }

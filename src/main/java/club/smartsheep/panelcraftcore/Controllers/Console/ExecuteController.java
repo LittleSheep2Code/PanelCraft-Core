@@ -1,5 +1,6 @@
 package club.smartsheep.panelcraftcore.Controllers.Console;
 
+import club.smartsheep.panelcraftcore.Common.ActionRecorder.RecordAction;
 import club.smartsheep.panelcraftcore.Common.CommandExecutor;
 import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpExchange;
 import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpHandler;
@@ -28,6 +29,7 @@ public class ExecuteController extends PanelHttpHandler {
             response.put("status", "success");
             response.put("data", executor.getRawMessageLog());
             executor.clearMessageLog();
+            RecordAction.recordDown("Root", "Executed the command: " + body.getString("command"), exchange.getClientIP());
             try {
                 exchange.send(response);
             } catch (IOException e) {

@@ -16,6 +16,7 @@ import club.smartsheep.panelcraftcore.Controllers.Security.UserManagement.Create
 import club.smartsheep.panelcraftcore.PanelCraft;
 import club.smartsheep.panelcraftcore.Server.HTTP.Errors.RouteRegisterError;
 import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.ErrorResponse;
+import com.auth0.jwt.JWT;
 import com.sun.net.httpserver.HttpServer;
 import lombok.SneakyThrows;
 
@@ -114,6 +115,8 @@ public class PanelHttpServer {
                         wExchange.getErrorSender().SQLErrorResponse(e.getSQLState(), "when check your authorization code, error occurred");
                         return;
                     }
+                    wExchange.getAffiliatedData().put("Authorization-Core", authorizationCode.get(0));
+                    wExchange.getAffiliatedData().put("Authorization-Username", JWT.decode(authorizationCode.get(0)).getAudience().get(0));
                     break;
                 case ADMIN:
                     authorizationCode = exchange.getRequestHeaders().get("Authorization-Code");
@@ -131,6 +134,8 @@ public class PanelHttpServer {
                         wExchange.getErrorSender().SQLErrorResponse(e.getSQLState(), "when check your authorization code, error occurred");
                         return;
                     }
+                    wExchange.getAffiliatedData().put("Authorization-Core", authorizationCode.get(0));
+                    wExchange.getAffiliatedData().put("Authorization-Username", JWT.decode(authorizationCode.get(0)).getAudience().get(0));
                     break;
                 case ROOT:
                     authorizationCode = exchange.getRequestHeaders().get("Authorization-Code");
