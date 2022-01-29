@@ -1,6 +1,5 @@
 package club.smartsheep.panelcraftcore.Controllers.Dangerous.Initialize;
 
-import club.smartsheep.panelcraftcore.Common.ActionRecorder.RecordAction;
 import club.smartsheep.panelcraftcore.Common.Configure.DatabaseInitialization;
 import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpExchange;
 import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpHandler;

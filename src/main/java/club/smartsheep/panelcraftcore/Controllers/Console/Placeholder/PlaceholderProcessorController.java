@@ -50,7 +50,7 @@ public class PlaceholderProcessorController extends PanelHttpHandler {
         }
 
         Map<String, Object> response = new HashMap<>();
-        RecordAction.recordDown(exchange.getAffiliatedData().getString("Authorization-Username"),
+        RecordAction.recordDown(exchange.Authorization_Username,
                 "Use PlaceholderAPI formatted a message: " + body.getString("message"),
                 exchange.getClientIP());
         response.put("status", "success");

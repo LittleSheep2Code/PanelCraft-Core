@@ -26,7 +26,8 @@ public class PanelHttpExchange {
 
     private int statusCode = 200;
 
-    private JSONObject AffiliatedData;
+    public String Authorization_Code;
+    public String Authorization_Username;
 
     public PanelHttpExchange(HttpExchange exchange) {
         this.exchange = exchange;
@@ -34,14 +35,6 @@ public class PanelHttpExchange {
 
     public HttpExchange getOriginalExchange() {
         return this.exchange;
-    }
-
-    public JSONObject getAffiliatedData() {
-        return this.AffiliatedData;
-    }
-
-    public void setFullAffiliatedData(JSONObject object) {
-        this.AffiliatedData = object;
     }
 
     public String getRequestBody() throws IOException {

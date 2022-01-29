@@ -43,7 +43,7 @@ public class VaultEconomyController extends PanelHttpHandler {
             Map<String, Object> response = new HashMap<>();
             response.put("status", "success");
             response.put("data", PanelCraft.economy.getBalance(player));
-            RecordAction.recordDown(exchange.getAffiliatedData().getString("Authorization-Username"),
+            RecordAction.recordDown(exchange.Authorization_Username,
                     "Query the player " + body.getString("player") + "'s vault bank(economy) balance",
                     exchange.getClientIP());
             exchange.send(response);
@@ -64,7 +64,7 @@ public class VaultEconomyController extends PanelHttpHandler {
             case "deposit":
                 PanelCraft.economy.depositPlayer(player, body.getDouble("amount"));
                 response.put("data", "Deposit player " + body.getString("player") + " balance " + body.getDouble("amount"));
-                RecordAction.recordDown(exchange.getAffiliatedData().getString("Authorization-Username"),
+                RecordAction.recordDown(exchange.Authorization_Username,
                         "Let player " + body.getString("player") + "'s vault bank(economy) added " + body.getDouble("amount") + " money",
                         exchange.getClientIP());
                 break;
@@ -73,7 +73,7 @@ public class VaultEconomyController extends PanelHttpHandler {
             case "subtract":
                 PanelCraft.economy.withdrawPlayer(player, body.getDouble("amount"));
                 response.put("data", "Withdraw player " + body.getString("player") + " balance " + body.getDouble("amount"));
-                RecordAction.recordDown(exchange.getAffiliatedData().getString("Authorization-Username"),
+                RecordAction.recordDown(exchange.Authorization_Username,
                         "Let player " + body.getString("player") + "'s vault bank(economy) reduced " + body.getDouble("amount") + " money",
                         exchange.getClientIP());
                 break;

@@ -11,7 +11,7 @@ public class ReloadController extends PanelHttpHandler {
     @Override
     @SneakyThrows
     public void handle(PanelHttpExchange exchange) {
-        RecordAction.recordDown(exchange.getAffiliatedData().getString("Authorization-Username"), "Reloaded the server", exchange.getClientIP());
+        RecordAction.recordDown(exchange.Authorization_Username, "Reloaded the server", exchange.getClientIP());
         Bukkit.getScheduler().runTask(PanelCraft.getPlugin(PanelCraft.class), () -> Bukkit.getServer().reload());
         exchange.send();
     }
