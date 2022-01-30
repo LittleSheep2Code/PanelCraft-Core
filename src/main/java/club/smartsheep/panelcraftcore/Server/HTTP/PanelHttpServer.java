@@ -21,30 +21,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class PanelHttpServer {
-    public enum RequestMethod {
-        GET("GET"),
-        POST("POST"),
-        PUT("PUT"),
-        DELETE("DELETE"),
-        PATCH("PATCH"),
-        TRACE("TRACE"),
-        OPTIONS("OPTIONS");
-
-        public final String name;
-
-        RequestMethod(String name) {
-            this.name = name;
-        }
-    }
-
-    public enum SecurityLevel {
-        PLAYER,
-        ADMIN,
-        ROOT
-    }
-
     private static PanelHttpServer instance = null;
-
     private HttpServer server;
 
     private PanelHttpServer() {
@@ -97,14 +74,29 @@ public class PanelHttpServer {
 
             String authorizationCode = exchange.getRequestHeaders().get("Authorization-Code").get(0);
 
-            if(authorizationCode == null) {
+            if (authorizationCode == null) {
                 panelExchange.getErrorSender().MissingHeaderErrorResponse("Authorization-Code");
                 return;
             }
 
-            if(!new AuthorizationDecoder(authorizationCode).checkRoleToAccess(security)) {
-                panelExchange.getErrorSender().InsufficientPermissionsErrorResponse();
-                return;
+            switch(new AuthorizationDecoder(authorizationCode).checkRoleToAccess(security))  {
+                case Error:
+                    return;
+                case InsufficientPermissions:
+                    switch (security) {
+                        case ROOT:
+                            panelExchange.getErrorSender().InsufficientPermissionsErrorResponse("root role");
+                        case ADMIN:
+                            panelExchange.getErrorSender().InsufficientPermissionsErrorResponse("admin role");
+                        case PLAYER:
+                            panelExchange.getErrorSender().InsufficientPermissionsErrorResponse("player role");
+                    }
+                    return;
+                case AuthorizationCodeUnavailable:
+                    panelExchange.getErrorSender().UnavailableAuthorizationCodeError();
+                    return;
+                case OK:
+                    break;
             }
 
             panelExchange.Authorization_Code = authorizationCode;
@@ -128,14 +120,22 @@ public class PanelHttpServer {
 
             String authorizationCode = exchange.getRequestHeaders().get("Authorization-Code").get(0);
 
-            if(authorizationCode == null) {
+            if (authorizationCode == null) {
                 panelExchange.getErrorSender().MissingHeaderErrorResponse("Authorization-Code");
                 return;
             }
 
-            if(!new AuthorizationDecoder(authorizationCode).checkPermissionToAccess(permission)) {
-                panelExchange.getErrorSender().InsufficientPermissionsErrorResponse();
-                return;
+            switch (new AuthorizationDecoder(authorizationCode).checkPermissionToAccess(permission)) {
+                case Error:
+                    return;
+                case InsufficientPermissions:
+                    panelExchange.getErrorSender().InsufficientPermissionsErrorResponse(permission + " permission");
+                    return;
+                case AuthorizationCodeUnavailable:
+                    panelExchange.getErrorSender().UnavailableAuthorizationCodeError();
+                    return;
+                case OK:
+                    break;
             }
 
             panelExchange.Authorization_Code = authorizationCode;
@@ -169,5 +169,27 @@ public class PanelHttpServer {
 
     public void shutdown(int delay) {
         server.stop(delay);
+    }
+
+    public enum RequestMethod {
+        GET("GET"),
+        POST("POST"),
+        PUT("PUT"),
+        DELETE("DELETE"),
+        PATCH("PATCH"),
+        TRACE("TRACE"),
+        OPTIONS("OPTIONS");
+
+        public final String name;
+
+        RequestMethod(String name) {
+            this.name = name;
+        }
+    }
+
+    public enum SecurityLevel {
+        PLAYER,
+        ADMIN,
+        ROOT
     }
 }
