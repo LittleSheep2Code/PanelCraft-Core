@@ -78,10 +78,11 @@ public class AuthorizationDecoder {
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
+                return false;
             }
         }
 
-        if(requirePermission.startsWith("admin")) {
+        else if(requirePermission.startsWith("admin")) {
             try {
                 if(AuthorizationTokenChecker.check(this.code, "ADMIN")) {
                     return AuthorizationTokenChecker.check(this.code, new String[]{requirePermission});
@@ -90,9 +91,17 @@ public class AuthorizationDecoder {
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
+                return false;
             }
         }
 
-        return false;
+        else {
+            try {
+                return AuthorizationTokenChecker.check(this.code, new String[]{requirePermission});
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
     }
 }

@@ -14,9 +14,6 @@ import club.smartsheep.panelcraftcore.Controllers.Security.UserManagement.Create
 import club.smartsheep.panelcraftcore.Modules.Security.AuthorizationDecoder;
 import club.smartsheep.panelcraftcore.PanelCraft;
 import club.smartsheep.panelcraftcore.Server.HTTP.Errors.RouteRegisterError;
-import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.ErrorResponse;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.sun.net.httpserver.HttpServer;
 import lombok.SneakyThrows;
 
@@ -76,12 +73,13 @@ public class PanelHttpServer {
             throw new RouteRegisterError("Path is need start by a slash, and cannot end by slash", path);
         }
         server.createContext(path, exchange -> {
+            PanelHttpExchange panelExchange = new PanelHttpExchange(exchange);
             if (!exchange.getRequestMethod().equalsIgnoreCase(method.name)) {
-                ErrorResponse.MethodNotAllowResponse(exchange);
+                panelExchange.getErrorSender().MethodNotAllowResponse();
                 return;
             }
 
-            handler.handle(new PanelHttpExchange(exchange));
+            handler.handle(panelExchange);
         });
         return true;
     }

@@ -1,6 +1,5 @@
 package club.smartsheep.panelcraftcore.Server.HTTP;
 
-import club.smartsheep.panelcraftcore.Server.HTTP.Responsor.ErrorResponse;
 import com.sun.net.httpserver.HttpExchange;
 import org.json.JSONObject;
 
@@ -46,7 +45,7 @@ public class PanelHttpExchange {
             return new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
         } catch (IOException e) {
             e.printStackTrace();
-            ErrorResponse.BodyProcessErrorResponse(exchange, "failed to format your request body to String!");
+            this.getErrorSender().BodyProcessErrorResponse("failed to format your request body to String!");
             return null;
         }
     }
@@ -60,7 +59,7 @@ public class PanelHttpExchange {
             return new JSONObject(new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8));
         } catch (IOException e) {
             e.printStackTrace();
-            ErrorResponse.BodyProcessErrorResponse(exchange, "failed to format your request body to JSONObject!");
+            this.getErrorSender().BodyProcessErrorResponse("failed to format your request body to JSONObject!");
             return null;
         }
     }

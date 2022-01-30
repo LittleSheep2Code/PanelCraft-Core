@@ -35,7 +35,7 @@ public class PanelHttpErrorSender {
     }
 
     public void InsufficientPermissionsErrorResponse() {
-        this.CustomErrorResponse("InsufficientPermissions", "Please check your password or reset it, the root password is wrong.");
+        this.CustomErrorResponse("InsufficientPermissions", "You do not have permission to access this API, please check your provide authorization code and user permission!");
     }
 
     public void DataErrorResponse(String message) {

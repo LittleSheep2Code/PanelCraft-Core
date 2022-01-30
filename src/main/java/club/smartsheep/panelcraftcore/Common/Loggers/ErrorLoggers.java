@@ -26,4 +26,12 @@ public class ErrorLoggers {
         PluginLogger.warning("§c[!] §4§l[FATAL] §4§eWeb server cannot start up, because: §e" + error);
         PluginLogger.warning("");
     }
+
+    public void JSONProcessError(String when, String what) {
+        PluginLogger.warning("");
+        PluginLogger.warning("§c[!] §4§l                 ERROR!");
+        PluginLogger.warning("");
+        PluginLogger.warning("§c[!] §4§l[FATAL] §4§eCouldn't covert " + what + " to usable json object at " + when);
+        PluginLogger.warning("");
+    }
 }
