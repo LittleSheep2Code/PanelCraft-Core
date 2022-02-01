@@ -1,5 +1,6 @@
 package club.smartsheep.panelcraftcore.Controllers.Security.UserManagement;
 
+import club.smartsheep.panelcraftcore.Common.ActionRecorder.RecordAction;
 import club.smartsheep.panelcraftcore.Common.Configure.DatabaseConnector;
 import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpExchange;
 import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpHandler;
@@ -71,6 +72,8 @@ public class CreateAccountController extends PanelHttpHandler {
             exchange.getErrorSender().SQLErrorResponse(null, "Error when creating account(script: " + script + ")");
             return;
         }
+
+        RecordAction.recordDown("Root", "Create user: " + body.getString("username"), exchange.getClientIP());
 
         Map<String, Object> response = new HashMap<>();
         response.put("status", "success");

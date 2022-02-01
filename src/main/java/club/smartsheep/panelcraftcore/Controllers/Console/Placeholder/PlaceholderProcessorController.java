@@ -1,5 +1,6 @@
 package club.smartsheep.panelcraftcore.Controllers.Console.Placeholder;
 
+import club.smartsheep.panelcraftcore.Common.ActionRecorder.RecordAction;
 import club.smartsheep.panelcraftcore.Common.Loggers.ErrorLoggers;
 import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpExchange;
 import club.smartsheep.panelcraftcore.Server.HTTP.PanelHttpHandler;
@@ -33,6 +34,10 @@ public class PlaceholderProcessorController extends PanelHttpHandler {
             return;
         }
 
+        if(body.getString("message").length() >= 1200) {
+            exchange.getErrorSender().DataErrorResponse("message length must less than 1200 character!");
+        }
+
         if(!body.has("player")) {
             exchange.getErrorSender().MissingArgumentsErrorResponse("player");
             return;
@@ -45,6 +50,9 @@ public class PlaceholderProcessorController extends PanelHttpHandler {
         }
 
         Map<String, Object> response = new HashMap<>();
+        RecordAction.recordDown(exchange.Authorization_Username,
+                "Use PlaceholderAPI formatted a message: " + body.getString("message"),
+                exchange.getClientIP());
         response.put("status", "success");
         response.put("data", PlaceholderAPI.setPlaceholders(player, body.getString("message")));
 

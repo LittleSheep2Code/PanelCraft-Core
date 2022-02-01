@@ -11,6 +11,7 @@ import lombok.SneakyThrows;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -52,6 +53,7 @@ public final class PanelCraft extends JavaPlugin {
 
         // Start automatic update root password
         RootRandomPasswordGenerator.startup();
+        getPlugin(PanelCraft.class).getCommand("refreshpanelrootpassword").setExecutor(new RootRandomPasswordGenerator());
 
         // Start hooking
         VaultHook.hookVault();

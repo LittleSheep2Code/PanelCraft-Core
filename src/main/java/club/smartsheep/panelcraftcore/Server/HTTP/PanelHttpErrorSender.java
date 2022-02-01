@@ -34,8 +34,12 @@ public class PanelHttpErrorSender {
         this.CustomErrorResponse("FormatBodyFailed", "Please check your body, " + reason + ".");
     }
 
-    public void InsufficientPermissionsErrorResponse() {
-        this.CustomErrorResponse("InsufficientPermissions", "Please check your password or reset it, the root password is wrong.");
+    public void InsufficientPermissionsErrorResponse(String permission) {
+        this.CustomErrorResponse("InsufficientPermissions", "You do not have permission to access this API, This API require " + permission + " to access! Please check your user permission!");
+    }
+
+    public void UnavailableAuthorizationCodeError() {
+        this.CustomErrorResponse("UnavailableAuthorizationCode", "Please check your authorization code!");
     }
 
     public void DataErrorResponse(String message) {

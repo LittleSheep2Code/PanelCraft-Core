@@ -1,19 +1,29 @@
 package club.smartsheep.panelcraftcore.Common.Tokens;
 
 import club.smartsheep.panelcraftcore.Common.Configure.DatabaseConnector;
+import club.smartsheep.panelcraftcore.Common.Loggers.ErrorLoggers;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.DecodedJWT;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class CheckAuthorizationToken {
+public class AuthorizationTokenChecker {
+    public static boolean test(String token) {
+        try {
+            JWT.decode(token);
+        } catch (JWTDecodeException e) {
+            return false;
+        }
+        return true;
+    }
+
     public static boolean check(String token) throws SQLException {
         String username;
         try {
@@ -97,7 +107,14 @@ public class CheckAuthorizationToken {
         Statement statement = DatabaseConnector.get().connect().createStatement();
         ResultSet set = statement.executeQuery(script);
         String password = set.getString("password");
-        JSONObject permissions = new JSONObject(set.getString("permissions"));
+
+        JSONObject permissions;
+        try {
+            permissions = new JSONObject(set.getString("permissions"));
+        } catch (JSONException e) {
+            new ErrorLoggers().JSONProcessError("check user AuthorizationCode", "user permission");
+            return false;
+        }
 
         for (String requirePermission : requirePermissions) {
             if(!permissions.has(requirePermission)) {
