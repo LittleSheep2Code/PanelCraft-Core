@@ -6,7 +6,7 @@
 
     <groupId>club.smartsheep</groupId>
     <artifactId>panelcraftcore</artifactId>
-    <version>2.98.8</version>
+    <version>2.5.0.8</version>
     <packaging>jar</packaging>
 
     <name>PanelCraft</name>
